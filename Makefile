@@ -31,7 +31,10 @@ src =\
 	./random_string.c \
 	./spacelen.c \
 	./str_arraydup.c \
-	./strsort.c \
+	./debug_array.c \
+	./is_available_pid.c \
+	./is_num_string.c \
+	./ft_quick_sort.c \
 
 # ***********************************
 
