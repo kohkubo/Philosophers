@@ -6,7 +6,7 @@
 /*   By: kohkubo <kohkubo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 16:01:50 by kohkubo           #+#    #+#             */
-/*   Updated: 2021/08/29 11:29:00 by kohkubo          ###   ########.fr       */
+/*   Updated: 2021/08/29 11:43:58 by kohkubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,7 @@ char	*random_string(size_t size);
 char	**str_arraydup(char **array);
 int		debug_arraycmp(char **aa, char **bb);
 bool	is_available_pid(int pid);
+bool	is_num_string(char *s);
+void	ft_quick_sort(int array[], int left, int right);
 
 #endif

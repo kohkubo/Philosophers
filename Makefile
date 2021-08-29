@@ -32,6 +32,8 @@ src =\
 	./str_arraydup.c \
 	./debug_array.c \
 	./is_available_pid.c \
+	./is_num_string.c \
+	./ft_quick_sort.c \
 
 # ***********************************
 
