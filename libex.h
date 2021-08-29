@@ -6,7 +6,7 @@
 /*   By: kohkubo <kohkubo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 16:01:50 by kohkubo           #+#    #+#             */
-/*   Updated: 2021/08/23 11:04:06 by kohkubo          ###   ########.fr       */
+/*   Updated: 2021/08/29 11:29:00 by kohkubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,6 @@ void	print_array(char **array);
 char	*random_string(size_t size);
 char	**str_arraydup(char **array);
 int		debug_arraycmp(char **aa, char **bb);
+bool	is_available_pid(int pid);
 
 #endif

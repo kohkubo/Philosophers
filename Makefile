@@ -31,6 +31,7 @@ src =\
 	./random_string.c \
 	./str_arraydup.c \
 	./debug_array.c \
+	./is_available_pid.c \
 
 # ***********************************
 
