@@ -6,16 +6,18 @@
 /*   By: kohkubo <kohkubo@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 16:01:50 by kohkubo           #+#    #+#             */
-/*   Updated: 2021/08/29 13:07:44 by kohkubo          ###   ########.fr       */
+/*   Updated: 2021/08/29 13:09:22 by kohkubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
+#ifndef LIBEX_H
 # define LIBEX_H
 # include "../libft/libft.h"
 # include <stdlib.h>
 # include <stdio.h>
 # include <stdbool.h>
 
+bool	is_available_pid(int pid);
+bool	is_num_string(char *s);
 bool	is_space_string(char *s);
 char	**free_string_array(char **buf);
 char	**str_arraydup(char **array);
@@ -36,12 +38,7 @@ void	*ft_xmalloc(size_t size);
 void	free_set(void **dst, void *src);
 void	ft_error_exit(const char *emsg);
 void	ft_fatal(const char *emsg);
-void	print_array(char **array);
-char	*random_string(size_t size);
-char	**str_arraydup(char **array);
-int		debug_arraycmp(char **aa, char **bb);
-bool	is_available_pid(int pid);
-bool	is_num_string(char *s);
 void	ft_quick_sort(int array[], int left, int right);
-
+void	print_array(char **array);
+void	strsort(char *str[], int n);
 #endif
