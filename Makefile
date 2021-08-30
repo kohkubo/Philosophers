@@ -1,51 +1,111 @@
 # ***********************************
 
-NAME	= philosophers
-includes = -I./includes
-CC		= gcc
-CFLAGS	= -Wall -Wextra -Werror -O3 $(includes) -g
-obj		= $(src:%.c=%.o)
+.PHONY		: all clean fclean re \
+			init \
+			norm \
+			test \
+			leak \
 
-.PHONY: all clean fclean re debug sani-debug
+# ***********************************
+
+NAME		= philo
+includes	= ./includes ./lib/libex ./lib/libft
+src_dir		= srcs
+obj_dir		= objs
+obj			= $(src:%.c=%.o)
+
+# ***********************************
+
+CC 			= gcc
+libs		= -L./lib/libft -L./lib/libex -lft -lex
+CFLAGS		= -Wall -Wextra -Werror -O2 -g $(includes:%=-I%)
 
 # ***********************************
 
 src =\
+	./srcs/main.c \
+	./srcs/util.c \
 
 # ***********************************
 
-all: $(NAME)
+lib_dir		= lib
+lib			= ./$(libft) \
+			./$(libex) \
 
-bonus: all
+sharedlib	= ./tests/sharedlib.c
 
-$(NAME): $(obj)
-	$(MAKE) -C lib/libft
-	$(MAKE) -C lib/libex
-	$(CC) $(CFLAGS) $(obj) -o $(NAME) $(flags) ./lib/libft/libft.a ./lib/libex/libex.a
+# ****************
 
-clean:
-	$(MAKE) clean -C lib/libex
-	$(MAKE) clean -C lib/libft
-	$(RM) -rf $(obj)
+libft_dir	= $(lib_dir)/libft
+libft		= $(libft_dir)/libft.a
 
-fclean: clean
-	$(MAKE) fclean -C lib/libex
-	$(MAKE) fclean -C lib/libft
-	$(RM) -rf $(NAME)
+# ****************
 
-re: fclean all
+libex_dir	= $(lib_dir)/libex
+libex		= $(libex_dir)/libex.a
 
 # ***********************************
 
-debug: fclean
-	$(MAKE) CFLAGS="$(CFLAGS) -D DEBUG=1 -g"
+all			: $(NAME)
 
-sani-debug: fclean
-	$(MAKE) CFLAGS="$(CFLAGS) -D DEBUG=1 -g -fsanitize=address -fno-omit-frame-pointer"
+$(NAME)		: $(obj) $(lib)
+	$(CC) $(CFLAGS) $(obj) -o $(NAME) $(libs)
 
-init:
-	zsh header.sh srcs includes/philosophers.h Makefile srcs
+clean		: lib_clean
+	$(RM) $(obj)
+	$(RM) -rf $(NAME).dSYM
+
+fclean		: lib_fclean
+	$(RM) $(obj)
+	$(RM) $(NAME)
+
+re			: fclean all
 
 # ***********************************
 
--include $(depends)
+init		:
+	zsh header.sh srcs includes/philo.h Makefile srcs
+
+test		: $(NAME)
+	bash ./tests/test.sh
+
+sani-debug	: fclean lib_sani-debug
+	$(MAKE) CFLAGS="$(CFLAGS) -fsanitize=address" $(lib)
+	$(MAKE) clean
+
+norm:
+	@printf "$(_RED)"; norminette $(src_dir) $(includes) ./lib \
+	| grep -v -e ": OK!" -v -e "Missing or invalid header. Header are being reintroduced as a mandatory part of your files. This is not yet an error." \
+	&& printf "$(_END)" && exit 1 \
+	|| printf "$(_GREEN)%s\n$(_END)" "Norm OK!"
+
+# ***********************************
+
+$(libft): $(libft_dir)/*.c
+	$(MAKE) -C $(libft_dir)
+
+$(libex): $(libex_dir)/*.c
+	$(MAKE) -C $(libex_dir)
+
+lib_make	:$(libft) $(libex)
+
+lib_clean	:
+	$(MAKE) clean -C $(libft_dir)
+	$(MAKE) clean -C $(libex_dir)
+
+lib_fclean	:
+	$(MAKE) fclean -C $(libft_dir)
+	$(MAKE) fclean -C $(libex_dir)
+
+# Colors
+# ****************************************************************************
+
+_GREY	= \033[30m
+_RED	= \033[31m
+_GREEN	= \033[32m
+_YELLOW	= \033[33m
+_BLUE	= \033[34m
+_PURPLE	= \033[35m
+_CYAN	= \033[36m
+_WHITE	= \033[37m
+_END	= \033[0m

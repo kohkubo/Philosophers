@@ -1,4 +1,4 @@
-#!/bin/zsh -x
+#!/bin/zsh -xe
 
 DIR=$1
 NAME_H=$2
@@ -31,7 +31,7 @@ $(echo "${prot}" |
 	}')
 "
 
-echo "${header}" >> ${NAME_H}
+echo "${header}" | sort -u >> ${NAME_H}
 sed -i '' -e '/\main(void);/d' ${NAME_H}
 
 echo '#endif' >> ${NAME_H}
@@ -43,7 +43,7 @@ sed -i '' -e 's/src =\\/src =/g' "${MAKE_PATH}"
 
 # cd "${DIR}" || exit
 
-srcs=$(find ./${DIR} -type f -name '*.c' | sed -e 's/^/\t/g' -e 's/$/\\/g')
+srcs=$(find ./${DIR} -type f -name '*.c' | sed -e 's/^/\t/g' -e 's/$/\\/g' | sort -n)
 
 cd ${CURDIR}
 
