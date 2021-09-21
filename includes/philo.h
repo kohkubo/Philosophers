@@ -2,11 +2,14 @@
 # define PHILO_H
 # include "libft.h"
 # include "libex.h"
+# include "logging.h"
 # include <pthread.h>
+# include <stdlib.h>
+# include <sys/time.h>
 # define PN_MAX 300
 enum	e_data
 {
-	PN = 0,
+	PN = 1,
 	TD,
 	TE,
 	TS,
@@ -15,7 +18,8 @@ enum	e_data
 };
 typedef enum e_status
 {
-	EAT = 0,
+	GRAB = 0,
+	EAT,
 	THINK,
 	SLEEP,
 	DIE
@@ -25,20 +29,36 @@ typedef struct s_philo
 	int			id;
 	t_status	status;
 	int			eat_count;
-	int			eat_time;
-	bool		fork_left;
-	bool		fork_right;
+	int64_t		last_eat_time;
+	int			fork_left;
+	int			fork_right;
 }				t_philo;
 typedef struct s_data
 {
 	int				main[ANK];
 	t_philo			philos[PN_MAX];
+	pthread_t		threads[PN_MAX];
+	pthread_t		monitor;
+	pthread_mutex_t	forks[PN_MAX];
+	pthread_mutex_t	print_mutex;
+	bool			dead_flg;
+	struct timeval	die_to_time;
 	struct timeval	start_time;
 	struct timeval	now_time;
 }				t_data;
 extern t_data	g_p;
 
+int		check_args_and_store(int ac, char **av);
+int		check_nums_and_store(int ac, char **av);
 int		ft_error_msg(const char *emsg);
 int		main(int ac, char **av);
+int		print_usage(void);
+int64_t	get_time(void);
+void	*monitor(void *arg);
+void	*philosopher(void *arg);
+void	debug_print(void);
+void	drop_forks(t_philo *p);
+void	grab_forks(t_philo *p);
+void	print_status(t_philo *p, t_status status);
 void	set_philos_time(int sec);
 #endif

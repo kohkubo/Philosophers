@@ -23,7 +23,9 @@ CFLAGS		= -Wall -Wextra -Werror -O2 -g $(includes:%=-I%)
 # ***********************************
 
 src =\
+	./srcs/init.c \
 	./srcs/main.c \
+	./srcs/monitor.c \
 	./srcs/util.c \
 
 # ***********************************

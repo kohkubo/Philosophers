@@ -1,0 +1,14 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+			{
+					"name": "c_debug",
+					"type": "lldb",
+					"request": "launch",
+					"program": "/Users/kohkubo/GitHub/42_master/Philosophers/philo",
+					"args": ["2", "400", "100", "100"],
+					"cwd": "${fileDirname}",
+					"postDebugTask": "rm_file"
+			}
+	]
+}
