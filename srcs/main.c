@@ -2,10 +2,16 @@
 
 t_data	g_p = {};
 #define DEBUG
+// ./philo 200 410 200 200 | awk '{print $1}' | tee act | sort -n > exp; diff -u exp act
+// ❯ ./philo 4 410 200 200 | awk '{print substr($1, length($1) - 12, 13) " " $2 " " $NF}'
 
-void ft_sleep(int time)
+void ft_sleep(int64_t msec)
 {
-	usleep(time * 1000);
+	int64_t	now;
+
+	now = get_time();
+	while (get_time() - now < msec)
+		;
 }
 
 void	philo_eat(t_philo *p)
@@ -95,18 +101,22 @@ static int	loop_data(void)
 	while (++i <= g_p.main[PN])
 	{
 		pthread_create(&g_p.threads[i], NULL, philosopher, &g_p.philos[i]);
+		// pthread_create(&g_p.monitors[i], NULL, monitor, &g_p.philos[i]);
 	}
 	i = 0;
 	while (++i <= g_p.main[PN])
 	{
 		pthread_join(g_p.threads[i], NULL);
+		// pthread_join(g_p.monitors[i], NULL);
 	}
 	i = 0;
 	while (++i < g_p.main[PN])
 	{
 		pthread_detach(g_p.threads[i]);
+		// pthread_detach(g_p.monitors[i]);
 		pthread_mutex_destroy(&g_p.forks[i]);
 	}
+	pthread_mutex_destroy(&g_p.print_mutex);
 	return (0);
 }
 

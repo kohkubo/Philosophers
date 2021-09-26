@@ -59,6 +59,7 @@ void	*monitor(void *arg);
 void	*philosopher(void *arg);
 void	debug_print(void);
 void	drop_forks(t_philo *p);
+void	ft_sleep(int64_t msec);
 void	grab_forks(t_philo *p);
 void	philo_eat(t_philo *p);
 void	philo_sleep(t_philo *p);
