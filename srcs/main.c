@@ -5,13 +5,15 @@ t_data	g_p = {};
 // ./philo 200 410 200 200 | awk '{print $1}' | tee act | sort -n > exp; diff -u exp act
 // ❯ ./philo 4 410 200 200 | awk '{print substr($1, length($1) - 12, 13) " " $2 " " $NF}'
 
-void ft_sleep(int64_t msec)
+void	ft_sleep(int64_t msec)
 {
 	int64_t	now;
 
 	now = get_time();
 	while (get_time() - now < msec)
-		;
+	{
+		usleep(900);
+	}
 }
 
 void	philo_eat(t_philo *p)
