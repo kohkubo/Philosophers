@@ -37,8 +37,8 @@ int	check_nums_and_store(int ac, char **av)
 		g_p.philos[i].id = i;
 		g_p.philos[i].fork_left = i;
 		g_p.philos[i].fork_right = i % g_p.main[PN] + 1;
-		g_p.philos[i].eat_count = 0;
-		g_p.philos[i].last_eat_time = 0;
+		if (i % 2 != 0)
+			g_p.philos[i].think_time = g_p.main[TE];
 	}
 	if (errno)
 		return (ft_error_msg("Invalid arguments: invalid time"));
