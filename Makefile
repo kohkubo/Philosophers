@@ -18,7 +18,7 @@ obj			= $(src:%.c=%.o)
 
 CC 			= gcc
 libs		= -L./lib/libft -L./lib/libex -lft -lex
-CFLAGS		= -Wall -Wextra -Werror -O2 -g $(includes:%=-I%)
+CFLAGS		= -Wall -Wextra -Werror -O2 -g $(includes:%=-I%) #-fsanitize=thread
 
 # ***********************************
 
@@ -57,7 +57,7 @@ clean		: lib_clean
 	$(RM) $(obj)
 	$(RM) -rf $(NAME).dSYM
 
-fclean		: lib_fclean
+fclean		: clean lib_fclean
 	$(RM) $(obj)
 	$(RM) $(NAME)
 
