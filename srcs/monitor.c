@@ -1,22 +1,27 @@
 #include "philo.h"
 
-// void	*monitor(void *arg)
-// {
-// 	int	i;
+void	*monitor(void *arg)
+{
+	t_philo *p;
 
-// 	(void)arg;
-// 	i = 1;
-// 	while (1)
-// 	{
-// 		int64_t time = get_time();
-// 		if (time - g_p.philos[i].last_eat_time >= g_p.main[TD])
-// 		{
-// 			printf(RED"%lld %d has died [%lld]\n"END, time, g_p.philos[i].id, time - g_p.philos[i].last_eat_time);
-// 			g_p.dead_flg = true;
-// 			return NULL;
-// 		}
-// 		i++;
-// 		if (i > g_p.main[PN])
-// 			i = 1;
-// 	}
-// }
+	p = (t_philo *)arg;
+	while (g_p.dead_flg == false)
+	{
+		ft_sleep(g_p.main[TD]);
+		int64_t time = get_time();
+		int64_t time_lag = time - p->last_eat_time;
+		if (time_lag >= g_p.main[TD])
+		{
+			pthread_mutex_lock(&g_p.print_mutex);
+			g_p.dead_flg = true;
+#ifdef DEBUG
+			printf(RED"%lld %d has died [%lld]\n"END, time, p->id, time_lag);
+#else
+			printf(RED"%lld %d has died\n"END, time, p->id);
+#endif
+			pthread_mutex_unlock(&g_p.print_mutex);
+			break ;
+		}
+	}
+	return (NULL);
+}
