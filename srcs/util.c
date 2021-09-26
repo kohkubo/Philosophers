@@ -30,9 +30,9 @@ void	debug_print(void)
 	while (i <= g_p.main[PN])
 	{
 		printf("===============\n");
-		printf("%d\n", g_p.philos[i].id);
-		printf("%d\n", g_p.philos[i].fork_left);
-		printf("%d\n", g_p.philos[i].fork_right);
+		printf("id: %d\n", g_p.philos[i].id);
+		printf("fork left : %d\n", g_p.philos[i].fork_left);
+		printf("fork right: %d\n", g_p.philos[i].fork_right);
 		i++;
 	}
 }
@@ -47,16 +47,16 @@ int64_t	get_time(void)
 
 void	grab_forks(t_philo *p)
 {
-	printf("grab_forks p->id : %d\n", p->id);
+	// printf("grab_forks p->id : %d\n", p->id);
 	pthread_mutex_lock(&(g_p.forks[p->fork_left]));
 	pthread_mutex_lock(&(g_p.forks[p->fork_right]));
-	printf("grab_forks p->id : %d\n", p->id);
+	// printf("grab_forks p->id : %d\n", p->id);
 }
 
 void	drop_forks(t_philo *p)
 {
-	printf("drop_forks p->id : %d\n", p->id);
+	// printf("drop_forks p->id : %d\n", p->id);
 	pthread_mutex_unlock(&(g_p.forks[p->fork_left]));
 	pthread_mutex_unlock(&(g_p.forks[p->fork_right]));
-	printf("drop_forks p->id : %d\n", p->id);
+	// printf("drop_forks p->id : %d\n", p->id);
 }
