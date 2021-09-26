@@ -4,24 +4,44 @@ t_data	g_p = {};
 
 void print_status(t_philo *p, t_status status)
 {
-	if (g_p.dead_flg == true)
-		return ;
-	pthread_mutex_lock(&(g_p.print_mutex));
 	if (status == EAT)
 	{
 		grab_forks(p);
-		printf("%lld %d has taken a fork\n", get_time(), p->id);
+		pthread_mutex_lock(&g_p.print_mutex);
+		if (g_p.dead_flg == true)
+		{
+			pthread_mutex_unlock(&g_p.print_mutex);
+			return ;
+		}
+		printf(GREEN"%lld %d has taken a fork\n"END, get_time(), p->id);
+		pthread_mutex_unlock(&g_p.print_mutex);
 		int64_t time = get_time();
 		int64_t time_lag = time - p->last_eat_time;
-		// if (0)
 		if (time_lag >= g_p.main[TD])
 		{
-			printf(RED"%lld %d has died [%lld]\n"END, time, p->id, time_lag);
+			pthread_mutex_lock(&g_p.print_mutex);
+			if (g_p.dead_flg == true)
+			{
+				pthread_mutex_unlock(&g_p.print_mutex);
+				return ;
+			}
 			g_p.dead_flg = true;
+			printf(RED"%lld %d has died\n"END, time, p->id);
+			// printf(RED"%lld %d has died [%lld]\n"END, time, p->id, time_lag);
+			pthread_mutex_unlock(&g_p.print_mutex);
+			return ;
 		}
 		else
 		{
-			printf("%lld %d is eating [%lld]\n", time, p->id, time_lag);
+			pthread_mutex_lock(&g_p.print_mutex);
+			if (g_p.dead_flg == true)
+			{
+				pthread_mutex_unlock(&g_p.print_mutex);
+				return ;
+			}
+			// printf(BLUE"%lld %d is eating [%lld]\n"END, time, p->id, time_lag);
+			printf(BLUE"%lld %d is eating\n"END, time, p->id);
+			pthread_mutex_unlock(&g_p.print_mutex);
 			p->last_eat_time = time;
 			usleep(g_p.main[TE] * 1000);
 			drop_forks(p);
@@ -29,17 +49,27 @@ void print_status(t_philo *p, t_status status)
 	}
 	else if (status == SLEEP)
 	{
-		printf("%lld %d is sleeping\n", get_time(), p->id);
+		pthread_mutex_lock(&g_p.print_mutex);
+		if (g_p.dead_flg == true)
+		{
+			pthread_mutex_unlock(&g_p.print_mutex);
+			return ;
+		}
+		printf(YELLOW"%lld %d is sleeping\n"END, get_time(), p->id);
+		pthread_mutex_unlock(&g_p.print_mutex);
 		usleep(g_p.main[TS] * 1000);
 	}
 	else if (status == THINK)
 	{
-		printf("%lld %d is thinking\n", get_time(), p->id);
-		usleep(g_p.main[TS] * 1000);
+		pthread_mutex_lock(&g_p.print_mutex);
+		if (g_p.dead_flg == true)
+		{
+			pthread_mutex_unlock(&g_p.print_mutex);
+			return ;
+		}
+		printf(MAGENTA"%lld %d is thinking\n"END, get_time(), p->id);
+		pthread_mutex_unlock(&g_p.print_mutex);
 	}
-	pthread_mutex_unlock(&(g_p.print_mutex));
-	if (g_p.dead_flg == true)
-		return ;
 }
 
 void	*philosopher(void *arg)
@@ -47,13 +77,8 @@ void	*philosopher(void *arg)
 	t_philo *p;
 
 	p = (t_philo *)arg;
-	printf("booooooooooooooooon\n");
+	usleep(p->think_time * 1000);
 	p->last_eat_time = get_time();
-	if (p->id % 2 == 0)
-	{
-		usleep(g_p.main[TE] * 1000);
-	}
-	printf("g_p.dead_flg : %d\n", g_p.dead_flg);
 	while (g_p.dead_flg == false)
 	{
 		print_status(p, EAT);
@@ -69,7 +94,6 @@ static int	loop_data(void)
 
 	if (gettimeofday(&g_p.start_time, NULL) == -1)
 		return (ft_error_msg("gettimeofday() failed"));
-	printf("%d start\n", g_p.start_time.tv_usec);
 	set_philos_time(g_p.start_time.tv_usec);
 	if (gettimeofday(&g_p.now_time, NULL) == -1)
 		return (ft_error_msg("gettimeofday() failed"));
@@ -78,9 +102,11 @@ static int	loop_data(void)
 		pthread_create(&g_p.threads[i], NULL, philosopher, &g_p.philos[i]);
 	i = 0;
 	while (++i <= g_p.main[PN])
+	{
 		pthread_join(g_p.threads[i], NULL);
+	}
 	// pthread_create(&g_p.monitor, NULL, monitor, NULL);
-	// pthread_detach(g_p.monitor);
+	// pthread_join(g_p.monitor, NULL);
 	return (0);
 }
 
