@@ -5,11 +5,12 @@
 			norm \
 			test \
 			leak \
+			sani-debug \
 
 # ***********************************
 
 NAME		= philo
-includes	= ./includes ./lib/libex ./lib/libft
+includes	= ./includes
 src_dir		= srcs
 obj_dir		= objs
 obj			= $(src:%.c=%.o)
@@ -17,47 +18,28 @@ obj			= $(src:%.c=%.o)
 # ***********************************
 
 CC 			= gcc
-libs		= -L./lib/libft -L./lib/libex -lft -lex
 CFLAGS		= -Wall -Wextra -Werror -O2 -g $(includes:%=-I%) #-fsanitize=thread
 
 # ***********************************
 
 src =\
-	./srcs/init.c \
+	./srcs/libft.c \
 	./srcs/main.c \
-	./srcs/monitor.c \
 	./srcs/util.c \
-
-# ***********************************
-
-lib_dir		= lib
-lib			= ./$(libft) \
-			./$(libex) \
-
-sharedlib	= ./tests/sharedlib.c
-
-# ****************
-
-libft_dir	= $(lib_dir)/libft
-libft		= $(libft_dir)/libft.a
-
-# ****************
-
-libex_dir	= $(lib_dir)/libex
-libex		= $(libex_dir)/libex.a
+	./srcs/util2.c \
 
 # ***********************************
 
 all			: $(NAME)
 
 $(NAME)		: $(obj) $(lib)
-	$(CC) $(CFLAGS) $(obj) -o $(NAME) $(libs)
+	$(CC) $(CFLAGS) $(obj) -o $(NAME)
 
-clean		: lib_clean
+clean		:
 	$(RM) $(obj)
 	$(RM) -rf $(NAME).dSYM
 
-fclean		: clean lib_fclean
+fclean		: clean
 	$(RM) $(obj)
 	$(RM) $(NAME)
 
@@ -80,24 +62,6 @@ norm:
 	| grep -v -e ": OK!" -v -e "Missing or invalid header. Header are being reintroduced as a mandatory part of your files. This is not yet an error." \
 	&& printf "$(_END)" && exit 1 \
 	|| printf "$(_GREEN)%s\n$(_END)" "Norm OK!"
-
-# ***********************************
-
-$(libft): $(libft_dir)/*.c
-	$(MAKE) -C $(libft_dir)
-
-$(libex): $(libex_dir)/*.c
-	$(MAKE) -C $(libex_dir)
-
-lib_make	:$(libft) $(libex)
-
-lib_clean	:
-	$(MAKE) clean -C $(libft_dir)
-	$(MAKE) clean -C $(libex_dir)
-
-lib_fclean	:
-	$(MAKE) fclean -C $(libft_dir)
-	$(MAKE) fclean -C $(libex_dir)
 
 # Colors
 # ****************************************************************************

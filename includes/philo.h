@@ -1,12 +1,15 @@
 #ifndef PHILO_H
 # define PHILO_H
-# include "libft.h"
-# include "libex.h"
 # include "logging.h"
 # include <pthread.h>
-# include <stdlib.h>
+# include <stdio.h>
 # include <sys/time.h>
-# define PN_MAX 300
+# include <stdint.h>
+# include <limits.h>
+# include <unistd.h>
+# include <stdbool.h>
+# include <errno.h>
+# define PN_MAX 210
 enum	e_data
 {
 	PN = 1,
@@ -50,9 +53,11 @@ typedef struct s_data
 extern t_data	g_p;
 
 bool	is_dead(int64_t time);
+bool	is_num_string(char *s);
 int		check_args_and_store(int ac, char **av);
 int		check_nums_and_store(int ac, char **av);
-int		ft_error_msg(const char *emsg);
+int		ft_atoi(const char *s);
+int		ft_error_msg(const char *s);
 int		main(int ac, char **av);
 int		print_usage(void);
 int64_t	get_time(void);
