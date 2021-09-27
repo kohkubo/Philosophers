@@ -10,7 +10,7 @@
 # include <stdbool.h>
 # include <errno.h>
 # define PN_MAX 210
-// # define DEBUG
+# define DEBUG
 enum	e_data
 {
 	PN = 1,
@@ -27,6 +27,7 @@ typedef struct s_philo
 	int			eat_count;
 	int64_t		last_eat_time;
 	int64_t		think_time;
+	int64_t		first_think_time;
 	int			fork_left;
 	int			fork_right;
 }				t_philo;
