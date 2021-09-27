@@ -1,7 +1,7 @@
 #include "philo.h"
 
 t_data	g_p = {};
-#define DEBUG
+// #define DEBUG
 // ./philo 200 410 200 200 | awk '{print $1}' | tee act | sort -n > exp; diff -u exp act
 // ❯ ./philo 4 410 200 200 | awk '{print substr($1, length($1) - 12, 13) " " $2 " " $NF}'
 
@@ -20,10 +20,9 @@ bool	is_dead(int64_t time)
 		if (g_p.philos[i].last_eat_time != 0 && time_lag > g_p.main[TD])
 		{
 #ifdef DEBUG
-			printf(RED"[%lld] %lld %d has died\n"END, time_lag, time, g_p.philos[i].id);
-#else
-			printf(RED"%lld %d has died\n"END, time, g_p.philos[i].id);
+			printf("[%lld] ", time_lag);
 #endif
+			printf(RED"%lld %d has died\n"END, time, g_p.philos[i].id);
 			g_p.dead_flg = true;
 			return (true);
 		}
@@ -58,10 +57,9 @@ void	philo_eat(t_philo *p)
 	else
 	{
 #ifdef DEBUG
-		printf(BLUE"%lld %d is eating [%lld]\n"END, time, p->id, time_lag);
-#else
-		printf(BLUE"%lld %d is eating\n"END, time, p->id);
+		printf("[%lld] "END, time_lag);
 #endif
+		printf(BLUE"%lld %d is eating\n"END, time, p->id);
 		if (g_p.main[EC] != -1 && ++p->eat_count >= g_p.main[EC])
 			g_p.dead_flg = true;
 		pthread_mutex_unlock(&g_p.print_mutex);
@@ -80,7 +78,9 @@ void	philo_action(t_philo *p, char *msg_fmt, int sleep_time)
 		pthread_mutex_unlock(&g_p.print_mutex);
 		return ;
 	}
+#ifdef DEBUG
 	printf("[%lld] ", time - p->last_eat_time);
+#endif
 	printf(msg_fmt, time, p->id);
 	pthread_mutex_unlock(&g_p.print_mutex);
 	ft_sleep(sleep_time);
