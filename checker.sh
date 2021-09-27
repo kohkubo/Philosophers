@@ -1,0 +1,11 @@
+rm -rf output
+N=4; ./philo $N 100 100 100 | awk '{print substr($1, length($1) - 12, 13) " " $2 " " $NF}' | sed '$d' | tee ./output
+
+for i in `seq 1 $N`; do
+	echo "==========="
+	echo "Philosopher $i"
+	echo -n "Eating:   "; cat output | grep "$i eating" | wc -l | tr -d ' ';
+	echo -n "Thinking: "; cat output | grep "$i thinking" | wc -l | tr -d ' ';
+	echo -n "Sleeping: "; cat output | grep "$i sleeping" | wc -l | tr -d ' ';
+	echo -n "Died:     "; cat output | grep "$i died" | wc -l | tr -d ' ';
+done
