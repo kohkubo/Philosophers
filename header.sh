@@ -32,7 +32,7 @@ $(echo "${prot}" |
 "
 
 echo "${header}" | sort -u >> ${NAME_H}
-sed -i '' -e '/\main(void);/d' ${NAME_H}
+sed -i '' -e '/\main(/d' ${NAME_H}
 
 echo '#endif' >> ${NAME_H}
 
