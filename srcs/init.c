@@ -39,8 +39,18 @@ int	check_nums_and_store(int ac, char **av)
 		g_p.philos[i].id = i;
 		g_p.philos[i].fork_left = i;
 		g_p.philos[i].fork_right = i % g_p.main[PN] + 1;
-		if (i % 2 != 0)
-			g_p.philos[i].think_time = g_p.main[TE];
+		if (g_p.main[PN] % 2 == 0)
+		{
+			if (i % 2 != 0)
+				g_p.philos[i].think_time = g_p.main[TE];
+		}
+		else
+		{
+			if (i % 3 == 0)
+				g_p.philos[i].think_time = g_p.main[TE];
+			else if (i % 3 == 1)
+				g_p.philos[i].think_time = g_p.main[TE] * 2;
+		}
 	}
 	if (errno)
 		return (ft_error_msg("Invalid arguments: invalid time"));
