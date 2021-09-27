@@ -56,7 +56,7 @@ void	philo_eat(t_philo *p)
 	}
 }
 
-void	philo_sleep(t_philo *p)
+void	philo_action(t_philo *p, char *msg_fmt, int sleep_time)
 {
 	pthread_mutex_lock(&g_p.print_mutex);
 	if (g_p.dead_flg == true)
@@ -64,21 +64,9 @@ void	philo_sleep(t_philo *p)
 		pthread_mutex_unlock(&g_p.print_mutex);
 		return ;
 	}
-	printf(YELLOW"%lld %d is sleeping\n"END, get_time(), p->id);
+	printf(msg_fmt, get_time(), p->id);
 	pthread_mutex_unlock(&g_p.print_mutex);
-	ft_sleep(g_p.main[TS]);
-}
-
-void	philo_think(t_philo *p)
-{
-	pthread_mutex_lock(&g_p.print_mutex);
-	if (g_p.dead_flg == true)
-	{
-		pthread_mutex_unlock(&g_p.print_mutex);
-		return ;
-	}
-	printf(MAGENTA"%lld %d is thinking\n"END, get_time(), p->id);
-	pthread_mutex_unlock(&g_p.print_mutex);
+	ft_sleep(sleep_time);
 }
 
 void	*philosopher(void *arg)
@@ -91,8 +79,8 @@ void	*philosopher(void *arg)
 	while (g_p.dead_flg == false)
 	{
 		philo_eat(p);
-		philo_think(p);
-		philo_sleep(p);
+		philo_action(p, YELLOW"%lld %d is sleeping\n"END, g_p.main[TS]);
+		philo_action(p, MAGENTA"%lld %d is thinking\n"END, 0);
 	}
 	return (NULL);
 }

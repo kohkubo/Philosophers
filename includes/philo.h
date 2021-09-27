@@ -61,8 +61,7 @@ void	debug_print(void);
 void	drop_forks(t_philo *p);
 void	ft_sleep(int64_t msec);
 void	grab_forks(t_philo *p);
+void	philo_action(t_philo *p, char *msg_fmt, int sleep_time);
 void	philo_eat(t_philo *p);
-void	philo_sleep(t_philo *p);
-void	philo_think(t_philo *p);
 void	set_philos_time(int sec);
 #endif
