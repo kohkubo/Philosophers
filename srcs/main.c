@@ -47,6 +47,8 @@ void	philo_eat(t_philo *p)
 #else
 		printf(BLUE"%lld %d is eating\n"END, time, p->id);
 #endif
+		if (g_p.main[EC] != -1 && ++p->eat_count >= g_p.main[EC])
+			g_p.dead_flg = true;
 		pthread_mutex_unlock(&g_p.print_mutex);
 		p->last_eat_time = time;
 		ft_sleep(g_p.main[TE]);

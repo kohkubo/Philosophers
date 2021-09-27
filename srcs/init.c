@@ -27,13 +27,15 @@ int	check_nums_and_store(int ac, char **av)
 		if (!is_num_string(av[i]))
 			return (ft_error_msg("Invalid arguments: not a number"));
 		g_p.main[i] = ft_atoi(av[i]);
-		pthread_mutex_init(&(g_p.forks[i]), NULL);
 		if (g_p.main[i] < 1)
-			return (ft_error_msg("Invalid arguments: invalid time"));
+			return (ft_error_msg("Invalid arguments: invalid numbers"));
 	}
+	if (ac == 5)
+		g_p.main[EC] = -1; 
 	i = 0;
 	while (++i <= g_p.main[PN])
 	{
+		pthread_mutex_init(&(g_p.forks[i]), NULL);
 		g_p.philos[i].id = i;
 		g_p.philos[i].fork_left = i;
 		g_p.philos[i].fork_right = i % g_p.main[PN] + 1;
