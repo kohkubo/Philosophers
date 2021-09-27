@@ -101,6 +101,13 @@ static int	loop_data(void)
 {
 	int	i;
 
+	if (g_p.main[PN] == 1)
+	{
+		usleep(g_p.main[TD] * 1000);
+		printf(RED"%lld %d has died\n"END, get_time(), 1);
+		pthread_mutex_destroy(&g_p.forks[1]);
+		return (0);
+	}
 	i = 0;
 	while (++i <= g_p.main[PN])
 	{
