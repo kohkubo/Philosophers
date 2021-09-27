@@ -2,34 +2,21 @@
 
 t_data	g_p = {};
 
-void	philo_eat(t_philo *p)
+static void	philo_eat(t_philo *p)
 {
 	int64_t	time;
 
 	pthread_mutex_lock(&(g_p.forks[p->fork_left]));
 	pthread_mutex_lock(&g_p.print_mutex);
+	if (grab_forks(p) == false)
+		return ;
 	time = get_time();
 	if (is_dead(time))
 	{
 		pthread_mutex_unlock(&g_p.print_mutex);
 		return ;
 	}
-	printf(GREEN"%lld %d has taken a fork\n"END, time, p->id);
-	pthread_mutex_lock(&(g_p.forks[p->fork_right]));
-	time = get_time();
-	if (is_dead(time))
-	{
-		pthread_mutex_unlock(&g_p.print_mutex);
-		return ;
-	}
-	printf(GREEN"%lld %d has taken a fork\n"END, time, p->id);
-	time = get_time();
-	if (is_dead(time))
-	{
-		pthread_mutex_unlock(&g_p.print_mutex);
-		return ;
-	}
-	printf(BLUE"[%lld] %lld %d is eating\n"END, time - p->last_eat_time, time, p->id);
+	printf(BLUE"%lld %d is eating\n"END, time, p->id);
 	pthread_mutex_unlock(&g_p.print_mutex);
 	p->last_eat_time = time;
 	if (g_p.main[EC] != -1 && ++p->eat_count > g_p.main[EC])
@@ -38,7 +25,7 @@ void	philo_eat(t_philo *p)
 	drop_forks(p);
 }
 
-void	philo_action(t_philo *p, char *msg_fmt, int sleep_time)
+static void	philo_action(t_philo *p, char *msg_fmt, int sleep_time)
 {
 	int64_t	time;
 
@@ -54,23 +41,7 @@ void	philo_action(t_philo *p, char *msg_fmt, int sleep_time)
 	ft_sleep(sleep_time);
 }
 
-void	philo_action_debug(t_philo *p, char *msg_fmt, int sleep_time)
-{
-	int64_t	time;
-
-	pthread_mutex_lock(&g_p.print_mutex);
-	time = get_time();
-	if (is_dead(time))
-	{
-		pthread_mutex_unlock(&g_p.print_mutex);
-		return ;
-	}
-	printf(msg_fmt, time - p->last_eat_time, time, p->id);
-	pthread_mutex_unlock(&g_p.print_mutex);
-	ft_sleep(sleep_time);
-}
-
-void	*philosopher(void *arg)
+static void	*philosopher(void *arg)
 {
 	t_philo	*p;
 
@@ -79,20 +50,14 @@ void	*philosopher(void *arg)
 	ft_sleep(p->first_think_time);
 	while (g_p.dead_flg == false)
 	{
-#ifdef DEBUG
-		philo_eat(p);
-		philo_action_debug(p, YELLOW"[%lld] %lld %d is sleeping\n"END, g_p.main[TS]);
-		philo_action_debug(p, MAGENTA"[%lld] %lld %d is thinking\n"END, p->think_time);
-#else
 		philo_eat(p);
 		philo_action(p, YELLOW"%lld %d is sleeping\n"END, g_p.main[TS]);
 		philo_action(p, MAGENTA"%lld %d is thinking\n"END, p->think_time);
-#endif
 	}
 	return (NULL);
 }
 
-int	loop_data(void)
+static int	loop_data(void)
 {
 	int	i;
 

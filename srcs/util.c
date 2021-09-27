@@ -56,6 +56,8 @@ int	check_nums_and_store(int ac, char **av)
 	}
 	if (errno)
 		return (ft_error_msg("Invalid arguments: invalid time"));
+	if (PN_MAX < g_p.main[PN])
+		return (ft_error_msg("Invalid arguments: too many philosophers"));
 	if (ac == 5)
 		g_p.main[EC] = -1;
 	pthread_mutex_init(&(g_p.print_mutex), NULL);

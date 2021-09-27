@@ -42,20 +42,16 @@ typedef struct s_data
 }				t_data;
 extern t_data	g_p;
 
+bool	grab_forks(t_philo *p);
 bool	is_dead(int64_t time);
 bool	is_num_string(char *s);
 int		check_args_and_store(int ac, char **av);
 int		check_nums_and_store(int ac, char **av);
 int		ft_atoi(const char *s);
 int		ft_error_msg(const char *s);
-int		loop_data(void);
 int		print_usage(void);
 int64_t	get_time(void);
-void	*philosopher(void *arg);
 void	drop_forks(t_philo *p);
 void	ft_sleep(int64_t msec);
-void	grab_forks(t_philo *p);
 void	init_philo(void);
-void	philo_action(t_philo *p, char *msg_fmt, int sleep_time);
-void	philo_eat(t_philo *p);
 #endif

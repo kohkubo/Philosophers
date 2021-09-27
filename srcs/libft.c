@@ -1,17 +1,15 @@
 #include "philo.h"
 
-static int	ft_isdigit(int c)
-{
-	return ('0' <= c && c <= '9');
-}
-
 bool	is_num_string(char *s)
 {
 	if (*s == '-' || *s == '+')
 		s++;
 	while (*s)
-		if (!ft_isdigit(*s++))
+	{
+		if (!('0' <= *s && *s <= '9'))
 			return (false);
+		s++;
+	}
 	return (true);
 }
 
@@ -37,7 +35,7 @@ int	ft_atoi(const char *s)
 	if (*s == '-' || *s == '+')
 		if (*s++ == '-')
 			neg = -1;
-	while (ft_isdigit(*s))
+	while ('0' <= *s && *s <= '9')
 	{
 		tmp = n;
 		n = n * 10 + *s++ - '0';
