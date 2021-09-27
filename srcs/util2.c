@@ -14,8 +14,24 @@ int	ft_error_msg(const char *s)
 
 void	grab_forks(t_philo *p)
 {
+	int64_t	time;
+
 	pthread_mutex_lock(&(g_p.forks[p->fork_left]));
+	time = get_time();
+	if (is_dead(time))
+	{
+		pthread_mutex_unlock(&g_p.print_mutex);
+		return ;
+	}
+	printf(GREEN"%lld %d has taken a fork\n"END, time, p->id);
 	pthread_mutex_lock(&(g_p.forks[p->fork_right]));
+	time = get_time();
+	if (is_dead(time))
+	{
+		pthread_mutex_unlock(&g_p.print_mutex);
+		return ;
+	}
+	printf(GREEN"%lld %d has taken a fork\n"END, time, p->id);
 }
 
 void	drop_forks(t_philo *p)
@@ -50,10 +66,7 @@ bool	is_dead(int64_t time)
 		time_lag = time - g_p.philos[i].last_eat_time;
 		if (g_p.philos[i].last_eat_time != 0 && time_lag > g_p.main[TD])
 		{
-#ifdef DEBUG
-			printf("[%lld] ", time_lag);
-#endif
-			printf(RED"%lld %d has died\n"END, time, g_p.philos[i].id);
+			printf(RED"[%lld] %lld %d has died\n"END, time_lag, time, g_p.philos[i].id);
 			g_p.dead_flg = true;
 			return (true);
 		}

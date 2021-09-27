@@ -27,14 +27,15 @@ void	init_philo(void)
 		if (g_p.main[PN] % 2 == 0)
 		{
 			if (i % 2 != 0)
-				g_p.philos[i].think_time = g_p.main[TE];
+				g_p.philos[i].first_think_time = g_p.main[TE];
 		}
 		else
 		{
 			if (i % 3 == 0)
-				g_p.philos[i].think_time = g_p.main[TE];
+				g_p.philos[i].first_think_time = g_p.main[TE];
 			else if (i % 3 == 1)
-				g_p.philos[i].think_time = g_p.main[TE] * 2;
+				g_p.philos[i].first_think_time = g_p.main[TE] * 2;
+			g_p.philos[i].think_time = 10;
 		}
 	}
 }

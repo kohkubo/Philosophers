@@ -5,9 +5,8 @@ t_data	g_p = {};
 void	philo_eat(t_philo *p)
 {
 	int64_t	time;
-	int64_t	time_lag;
 
-	grab_forks(p);
+	pthread_mutex_lock(&(g_p.forks[p->fork_left]));
 	pthread_mutex_lock(&g_p.print_mutex);
 	time = get_time();
 	if (is_dead(time))
@@ -16,32 +15,27 @@ void	philo_eat(t_philo *p)
 		return ;
 	}
 	printf(GREEN"%lld %d has taken a fork\n"END, time, p->id);
-	printf(GREEN"%lld %d has taken a fork\n"END, time, p->id);
-	time_lag = time - p->last_eat_time;
-	if (time_lag > g_p.main[TD])
+	pthread_mutex_lock(&(g_p.forks[p->fork_right]));
+	time = get_time();
+	if (is_dead(time))
 	{
-		g_p.dead_flg = true;
-#ifdef DEBUG
-		printf(RED"%lld %d has died [%lld]\n"END, time, p->id, time_lag);
-#else
-		printf(RED"%lld %d has died\n"END, time, p->id);
-#endif
 		pthread_mutex_unlock(&g_p.print_mutex);
 		return ;
 	}
-	else
+	printf(GREEN"%lld %d has taken a fork\n"END, time, p->id);
+	time = get_time();
+	if (is_dead(time))
 	{
-#ifdef DEBUG
-		printf("[%lld] "END, time_lag);
-#endif
-		printf(BLUE"%lld %d is eating\n"END, time, p->id);
-		p->last_eat_time = time;
-		if (g_p.main[EC] != -1 && ++p->eat_count > g_p.main[EC])
-			g_p.dead_flg = true;
 		pthread_mutex_unlock(&g_p.print_mutex);
-		ft_sleep(g_p.main[TE]);
-		drop_forks(p);
+		return ;
 	}
+	printf(BLUE"[%lld] %lld %d is eating\n"END, time - p->last_eat_time, time, p->id);
+	pthread_mutex_unlock(&g_p.print_mutex);
+	p->last_eat_time = time;
+	if (g_p.main[EC] != -1 && ++p->eat_count > g_p.main[EC])
+		g_p.dead_flg = true;
+	ft_sleep(g_p.main[TE]);
+	drop_forks(p);
 }
 
 void	philo_action(t_philo *p, char *msg_fmt, int sleep_time)
@@ -55,10 +49,23 @@ void	philo_action(t_philo *p, char *msg_fmt, int sleep_time)
 		pthread_mutex_unlock(&g_p.print_mutex);
 		return ;
 	}
-#ifdef DEBUG
-	printf("[%lld] ", time - p->last_eat_time);
-#endif
 	printf(msg_fmt, time, p->id);
+	pthread_mutex_unlock(&g_p.print_mutex);
+	ft_sleep(sleep_time);
+}
+
+void	philo_action_debug(t_philo *p, char *msg_fmt, int sleep_time)
+{
+	int64_t	time;
+
+	pthread_mutex_lock(&g_p.print_mutex);
+	time = get_time();
+	if (is_dead(time))
+	{
+		pthread_mutex_unlock(&g_p.print_mutex);
+		return ;
+	}
+	printf(msg_fmt, time - p->last_eat_time, time, p->id);
 	pthread_mutex_unlock(&g_p.print_mutex);
 	ft_sleep(sleep_time);
 }
@@ -69,15 +76,18 @@ void	*philosopher(void *arg)
 
 	p = (t_philo *)arg;
 	p->last_eat_time = get_time();
-	ft_sleep(p->think_time);
+	ft_sleep(p->first_think_time);
 	while (g_p.dead_flg == false)
 	{
+#ifdef DEBUG
+		philo_eat(p);
+		philo_action_debug(p, YELLOW"[%lld] %lld %d is sleeping\n"END, g_p.main[TS]);
+		philo_action_debug(p, MAGENTA"[%lld] %lld %d is thinking\n"END, p->think_time);
+#else
 		philo_eat(p);
 		philo_action(p, YELLOW"%lld %d is sleeping\n"END, g_p.main[TS]);
-		if (g_p.main[PN] % 2 == 0)
-			philo_action(p, MAGENTA"%lld %d is thinking\n"END, 0);
-		else
-			philo_action(p, MAGENTA"%lld %d is thinking\n"END, 20);
+		philo_action(p, MAGENTA"%lld %d is thinking\n"END, p->think_time);
+#endif
 	}
 	return (NULL);
 }
