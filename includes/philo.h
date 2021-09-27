@@ -10,6 +10,7 @@
 # include <stdbool.h>
 # include <errno.h>
 # define PN_MAX 210
+// # define DEBUG
 enum	e_data
 {
 	PN = 1,
@@ -58,16 +59,14 @@ int		check_args_and_store(int ac, char **av);
 int		check_nums_and_store(int ac, char **av);
 int		ft_atoi(const char *s);
 int		ft_error_msg(const char *s);
-int		main(int ac, char **av);
+int		loop_data(void);
 int		print_usage(void);
 int64_t	get_time(void);
-void	*monitor(void *arg);
 void	*philosopher(void *arg);
-void	debug_print(void);
 void	drop_forks(t_philo *p);
 void	ft_sleep(int64_t msec);
 void	grab_forks(t_philo *p);
+void	init_philo(void);
 void	philo_action(t_philo *p, char *msg_fmt, int sleep_time);
 void	philo_eat(t_philo *p);
-void	set_philos_time(int sec);
 #endif

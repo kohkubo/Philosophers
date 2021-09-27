@@ -1,40 +1,78 @@
 #include "philo.h"
 
-int	ft_error_msg(const char *emsg)
+int	print_usage(void)
 {
-	ft_putendl_fd((char *)emsg, 2);
-	return (1);
+	printf("\
+Usage: ./philo PN TD TE TS [EC]\n\n\
+\
+	PN = number of philosophers\n\
+	TD = time to die\n\
+	TE = time to eat\n\
+	TS = time to sleep\n\
+	EC = number of times each philosopher must eat\n");
+	return (0);
 }
 
-void	set_philos_time(int sec)
+void	init_philo(void)
 {
 	int	i;
 
 	i = 0;
-	while (i < g_p.main[PN])
+	while (++i <= g_p.main[PN])
 	{
-		g_p.philos[i].last_eat_time = sec;
-		i++;
+		pthread_mutex_init(&(g_p.forks[i]), NULL);
+		g_p.philos[i].id = i;
+		g_p.philos[i].fork_left = i;
+		g_p.philos[i].fork_right = i % g_p.main[PN] + 1;
+		if (g_p.main[PN] % 2 == 0)
+		{
+			if (i % 2 != 0)
+				g_p.philos[i].think_time = g_p.main[TE];
+		}
+		else
+		{
+			if (i % 3 == 0)
+				g_p.philos[i].think_time = g_p.main[TE];
+			else if (i % 3 == 1)
+				g_p.philos[i].think_time = g_p.main[TE] * 2;
+		}
 	}
 }
 
-void	debug_print(void)
+int	check_nums_and_store(int ac, char **av)
 {
-	printf("g_p.main[PN] : %d\n", g_p.main[PN]);
-	printf("pn : %d\n", g_p.main[PN]);
-	printf("td : %d\n", g_p.main[TD]);
-	printf("te : %d\n", g_p.main[TE]);
-	printf("ts : %d\n", g_p.main[TS]);
-	printf("ec : %d\n", g_p.main[EC]);
-	int i = 1;
-	while (i <= g_p.main[PN])
+	int	i;
+
+	errno = 0;
+	i = 0;
+	while (++i < ac)
 	{
-		printf("===============\n");
-		printf("id: %d\n", g_p.philos[i].id);
-		printf("fork left : %d\n", g_p.philos[i].fork_left);
-		printf("fork right: %d\n", g_p.philos[i].fork_right);
-		i++;
+		if (!is_num_string(av[i]))
+			return (ft_error_msg("Invalid arguments: not a number"));
+		g_p.main[i] = ft_atoi(av[i]);
+		if (g_p.main[i] < 1)
+			return (ft_error_msg("Invalid arguments: invalid numbers"));
 	}
+	if (errno)
+		return (ft_error_msg("Invalid arguments: invalid time"));
+	if (ac == 5)
+		g_p.main[EC] = -1;
+	pthread_mutex_init(&(g_p.print_mutex), NULL);
+	g_p.dead_flg = false;
+	init_philo();
+	return (0);
+}
+
+int	check_args_and_store(int ac, char **av)
+{
+	if (ac == 1)
+		return (print_usage());
+	if (ac < 5)
+		return (ft_error_msg("Invalid arguments: too few"));
+	else if (ac > 6)
+		return (ft_error_msg("Invalid arguments: too many"));
+	else
+		return (check_nums_and_store(ac, av));
 }
 
 int64_t	get_time(void)
@@ -43,20 +81,4 @@ int64_t	get_time(void)
 
 	gettimeofday(&tv, NULL);
 	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
-}
-
-void	grab_forks(t_philo *p)
-{
-	// printf("grab_forks p->id : %d\n", p->id);
-	pthread_mutex_lock(&(g_p.forks[p->fork_left]));
-	pthread_mutex_lock(&(g_p.forks[p->fork_right]));
-	// printf("grab_forks p->id : %d\n", p->id);
-}
-
-void	drop_forks(t_philo *p)
-{
-	// printf("drop_forks p->id : %d\n", p->id);
-	pthread_mutex_unlock(&(g_p.forks[p->fork_left]));
-	pthread_mutex_unlock(&(g_p.forks[p->fork_right]));
-	// printf("drop_forks p->id : %d\n", p->id);
 }
