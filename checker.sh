@@ -1,5 +1,6 @@
+make
 rm -rf output
-N=4; ./philo $N 100 100 100 | awk '{print substr($1, length($1) - 12, 13) " " $2 " " $NF}' | sed '$d' | tee ./output
+N=5; ./philo $N 800 200 200 7 | awk '{print substr($1, length($1) - 12, 13) " " $2 " " $NF}' | sed '$d' | tee ./output
 
 for i in `seq 1 $N`; do
 	echo "==========="

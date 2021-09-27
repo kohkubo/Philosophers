@@ -6,7 +6,7 @@
 					"type": "lldb",
 					"request": "launch",
 					"program": "/Users/kohkubo/GitHub/42_master/Philosophers/philo",
-					"args": ["2", "400", "100", "100"],
+					"args": ["2", "410", "200", "200"],
 					"cwd": "${fileDirname}",
 					"postDebugTask": "rm_file"
 			}
