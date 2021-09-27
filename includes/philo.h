@@ -49,6 +49,7 @@ typedef struct s_data
 }				t_data;
 extern t_data	g_p;
 
+bool	is_dead(int64_t time);
 int		check_args_and_store(int ac, char **av);
 int		check_nums_and_store(int ac, char **av);
 int		ft_error_msg(const char *emsg);

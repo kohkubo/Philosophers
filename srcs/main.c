@@ -5,31 +5,46 @@ t_data	g_p = {};
 // ./philo 200 410 200 200 | awk '{print $1}' | tee act | sort -n > exp; diff -u exp act
 // ❯ ./philo 4 410 200 200 | awk '{print substr($1, length($1) - 12, 13) " " $2 " " $NF}'
 
-void	ft_sleep(int64_t msec)
+bool	is_dead(int64_t time)
 {
-	int64_t	now;
+	int	i;
 
-	now = get_time();
-	while (get_time() - now < msec)
+	if (g_p.dead_flg == true)
 	{
-		usleep(900);
+		return (true);
 	}
+	i = 0;
+	while(++i <= g_p.main[PN])
+	{
+		int64_t time_lag = time - g_p.philos[i].last_eat_time;
+		if (g_p.philos[i].last_eat_time != 0 && time_lag > g_p.main[TD])
+		{
+#ifdef DEBUG
+			printf(RED"[%lld] %lld %d has died\n"END, time_lag, time, g_p.philos[i].id);
+#else
+			printf(RED"%lld %d has died\n"END, time, g_p.philos[i].id);
+#endif
+			g_p.dead_flg = true;
+			return (true);
+		}
+	}
+	return (false);
 }
 
 void	philo_eat(t_philo *p)
 {
 	grab_forks(p);
 	pthread_mutex_lock(&g_p.print_mutex);
-	if (g_p.dead_flg == true)
+	int64_t time = get_time();
+	if (is_dead(time))
 	{
 		pthread_mutex_unlock(&g_p.print_mutex);
 		return ;
 	}
-	int64_t time = get_time();
 	printf(GREEN"%lld %d has taken a fork\n"END, time, p->id);
 	printf(GREEN"%lld %d has taken a fork\n"END, time, p->id);
 	int64_t time_lag = time - p->last_eat_time;
-	if (time_lag >= g_p.main[TD])
+	if (time_lag > g_p.main[TD])
 	{
 		g_p.dead_flg = true;
 #ifdef DEBUG
@@ -59,12 +74,14 @@ void	philo_eat(t_philo *p)
 void	philo_action(t_philo *p, char *msg_fmt, int sleep_time)
 {
 	pthread_mutex_lock(&g_p.print_mutex);
-	if (g_p.dead_flg == true)
+	int64_t time = get_time();
+	if (is_dead(time))
 	{
 		pthread_mutex_unlock(&g_p.print_mutex);
 		return ;
 	}
-	printf(msg_fmt, get_time(), p->id);
+	printf("[%lld] ", time - p->last_eat_time);
+	printf(msg_fmt, time, p->id);
 	pthread_mutex_unlock(&g_p.print_mutex);
 	ft_sleep(sleep_time);
 }
