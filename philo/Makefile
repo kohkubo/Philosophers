@@ -58,7 +58,7 @@ sani-debug	: fclean lib_sani-debug
 	$(MAKE) clean
 
 norm:
-	@printf "$(_RED)"; norminette $(src_dir) $(includes) ./lib \
+	@printf "$(_RED)"; norminette $(src_dir) $(includes) \
 	| grep -v -e ": OK!" -v -e "Missing or invalid header. Header are being reintroduced as a mandatory part of your files. This is not yet an error." \
 	&& printf "$(_END)" && exit 1 \
 	|| printf "$(_GREEN)%s\n$(_END)" "Norm OK!"
