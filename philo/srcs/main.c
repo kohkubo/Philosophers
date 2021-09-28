@@ -6,7 +6,6 @@ static bool	philo_eat(t_philo *p)
 {
 	int64_t	time;
 
-	pthread_mutex_lock(&(g_p.forks[p->fork_left]));
 	pthread_mutex_lock(&g_p.print_mutex);
 	if (grab_forks(p) == false)
 		return (false);
