@@ -5,7 +5,7 @@
 					"name": "c_debug",
 					"type": "lldb",
 					"request": "launch",
-					"program": "/Users/kohkubo/GitHub/42_master/Philosophers/philo",
+					"program": "/Users/kohkubo/GitHub/42_master/Philosophers/philo_bonus/philo_bonus",
 					"args": ["2", "410", "200", "200"],
 					"cwd": "${fileDirname}",
 					"postDebugTask": "rm_file"

@@ -46,3 +46,35 @@ int	ft_atoi(const char *s)
 		errno = EINVAL;
 	return ((int)(n * neg));
 }
+
+void	ft_error_exit(const char *s)
+{
+	size_t	len;
+
+	len = 0;
+	while (s[len])
+		len++;
+	write(2, s, len);
+	write(2, "\n", 1);
+	exit(1);
+}
+
+pid_t	ft_fork(void)
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == -1)
+		ft_error_exit("Fork error");
+	return (pid);
+}
+
+pid_t	ft_waitpid(pid_t pid)
+{
+	pid_t	status;
+
+	status = waitpid(pid, NULL, 0);
+	if (status == -1)
+		ft_error_exit("Waitpid error");
+	return (status);
+}

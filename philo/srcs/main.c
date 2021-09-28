@@ -67,7 +67,7 @@ static int	loop_data(void)
 
 	if (g_p.main[PN] == 1)
 	{
-		usleep(g_p.main[TD] * 1000);
+		ft_sleep(g_p.main[TD]);
 		printf(RED"%lld %d has died\n"END, get_time(), 1);
 		pthread_mutex_destroy(&g_p.forks[1]);
 		return (0);
