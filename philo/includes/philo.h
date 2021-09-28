@@ -20,7 +20,6 @@ enum	e_data
 	EC,
 	ANK
 };
-
 typedef struct s_philo
 {
 	int			id;

@@ -2,30 +2,31 @@
 
 t_data	g_p = {};
 
-static void	philo_eat(t_philo *p)
+static bool	philo_eat(t_philo *p)
 {
 	int64_t	time;
 
 	pthread_mutex_lock(&(g_p.forks[p->fork_left]));
 	pthread_mutex_lock(&g_p.print_mutex);
 	if (grab_forks(p) == false)
-		return ;
+		return (false);
 	time = get_time();
 	if (is_dead(time))
 	{
 		pthread_mutex_unlock(&g_p.print_mutex);
-		return ;
+		return (false);
 	}
 	printf(BLUE"%lld %d is eating\n"END, time, p->id);
-	pthread_mutex_unlock(&g_p.print_mutex);
 	p->last_eat_time = time;
+	pthread_mutex_unlock(&g_p.print_mutex);
 	if (g_p.main[EC] != -1 && ++p->eat_count > g_p.main[EC])
 		g_p.dead_flg = true;
 	ft_sleep(g_p.main[TE]);
 	drop_forks(p);
+	return (true);
 }
 
-static void	philo_action(t_philo *p, char *msg_fmt, int sleep_time)
+static bool	philo_action(t_philo *p, char *msg_fmt, int sleep_time)
 {
 	int64_t	time;
 
@@ -34,11 +35,12 @@ static void	philo_action(t_philo *p, char *msg_fmt, int sleep_time)
 	if (is_dead(time))
 	{
 		pthread_mutex_unlock(&g_p.print_mutex);
-		return ;
+		return (false);
 	}
 	printf(msg_fmt, time, p->id);
 	pthread_mutex_unlock(&g_p.print_mutex);
 	ft_sleep(sleep_time);
+	return (true);
 }
 
 static void	*philosopher(void *arg)
@@ -46,13 +48,16 @@ static void	*philosopher(void *arg)
 	t_philo	*p;
 
 	p = (t_philo *)arg;
+	pthread_mutex_lock(&g_p.print_mutex);
 	p->last_eat_time = get_time();
+	pthread_mutex_unlock(&g_p.print_mutex);
 	ft_sleep(p->first_think_time);
-	while (g_p.dead_flg == false)
+	while (1)
 	{
-		philo_eat(p);
-		philo_action(p, YELLOW"%lld %d is sleeping\n"END, g_p.main[TS]);
-		philo_action(p, MAGENTA"%lld %d is thinking\n"END, p->think_time);
+		if (!philo_eat(p) || \
+		!philo_action(p, YELLOW"%lld %d is sleeping\n"END, g_p.main[TS]) || \
+		!philo_action(p, MAGENTA"%lld %d is thinking\n"END, p->think_time))
+			break ;
 	}
 	return (NULL);
 }
