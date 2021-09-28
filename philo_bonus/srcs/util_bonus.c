@@ -1,4 +1,4 @@
-#include "philo.h"
+#include "philo_bonus.h"
 
 int	print_usage(void)
 {
@@ -60,6 +60,7 @@ int	check_nums_and_store(int ac, char **av)
 		return (ft_error_msg("Invalid arguments: too many philosophers"));
 	if (ac == 5)
 		g_p.main[EC] = -1;
+	g_p.print_mutex = sem_open("/print_mutex", O_CREAT, 0644, 1);
 	pthread_mutex_init(&(g_p.print_mutex), NULL);
 	g_p.dead_flg = false;
 	init_philo();

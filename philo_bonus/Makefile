@@ -23,10 +23,10 @@ CFLAGS		= -Wall -Wextra -Werror -O2 -g $(includes:%=-I%) # -fsanitize=thread
 # ***********************************
 
 src =\
-	./srcs/libft.c \
-	./srcs/main.c \
-	./srcs/util.c \
-	./srcs/util2.c \
+	./srcs/libft_bonus.c \
+	./srcs/main_bonus.c \
+	./srcs/util2_bonus.c \
+	./srcs/util_bonus.c \
 
 # ***********************************
 
@@ -48,7 +48,7 @@ re			: fclean all
 # ***********************************
 
 init		:
-	zsh header.sh srcs includes/philo.h Makefile srcs
+	zsh header.sh srcs includes/philo_bonus.h Makefile srcs
 
 test		: $(NAME)
 	bash ./tests/test.sh

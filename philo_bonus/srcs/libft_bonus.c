@@ -1,4 +1,4 @@
-#include "philo.h"
+#include "philo_bonus.h"
 
 bool	is_num_string(char *s)
 {

@@ -1,4 +1,4 @@
-#include "philo.h"
+#include "philo_bonus.h"
 
 int	ft_error_msg(const char *s)
 {
@@ -16,10 +16,11 @@ bool	grab_forks(t_philo *p)
 {
 	int64_t	time;
 
+	sem_wait(g_p.forks);
 	time = get_time();
 	if (is_dead(time))
 	{
-		sem_post(&g_p.print_mutex);
+		sem_post(g_p.print_mutex);
 		return (false);
 	}
 	printf(GREEN"%lld %d has taken a fork\n"END, time, p->id);
@@ -27,7 +28,7 @@ bool	grab_forks(t_philo *p)
 	time = get_time();
 	if (is_dead(time))
 	{
-		sem_post(&g_p.print_mutex);
+		sem_post(g_p.print_mutex);
 		return (false);
 	}
 	printf(GREEN"%lld %d has taken a fork\n"END, time, p->id);

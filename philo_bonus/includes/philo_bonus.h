@@ -8,6 +8,8 @@
 # include <stdint.h>
 # include <limits.h>
 # include <unistd.h>
+# include <fcntl.h>
+# include <stdint.h>
 # include <stdbool.h>
 # include <errno.h>
 # define PN_MAX 210

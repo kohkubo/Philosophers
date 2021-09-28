@@ -1,4 +1,4 @@
-#include "philo.h"
+#include "philo_bonus.h"
 
 t_data	g_p = {};
 
@@ -6,19 +6,18 @@ static bool	philo_eat(t_philo *p)
 {
 	int64_t	time;
 
-	sem_wait(&(g_p.forks[p->fork_left]));
-	sem_wait(&g_p.print_mutex);
+	sem_wait(g_p.print_mutex);
 	if (grab_forks(p) == false)
 		return (false);
 	time = get_time();
 	if (is_dead(time))
 	{
-		sem_post(&g_p.print_mutex);
+		sem_post(g_p.print_mutex);
 		return (false);
 	}
 	printf(BLUE"%lld %d is eating\n"END, time, p->id);
 	p->last_eat_time = time;
-	sem_post(&g_p.print_mutex);
+	sem_post(g_p.print_mutex);
 	if (g_p.main[EC] != -1 && ++p->eat_count > g_p.main[EC])
 		g_p.dead_flg = true;
 	ft_sleep(g_p.main[TE]);
@@ -30,15 +29,15 @@ static bool	philo_action(t_philo *p, char *msg_fmt, int sleep_time)
 {
 	int64_t	time;
 
-	sem_wait(&g_p.print_mutex);
+	sem_wait(g_p.print_mutex);
 	time = get_time();
 	if (is_dead(time))
 	{
-		sem_post(&g_p.print_mutex);
+		sem_post(g_p.print_mutex);
 		return (false);
 	}
 	printf(msg_fmt, time, p->id);
-	sem_post(&g_p.print_mutex);
+	sem_post(g_p.print_mutex);
 	ft_sleep(sleep_time);
 	return (true);
 }
@@ -48,9 +47,9 @@ static void	*philosopher(void *arg)
 	t_philo	*p;
 
 	p = (t_philo *)arg;
-	sem_wait(&g_p.print_mutex);
+	sem_wait(g_p.print_mutex);
 	p->last_eat_time = get_time();
-	sem_post(&g_p.print_mutex);
+	sem_post(g_p.print_mutex);
 	ft_sleep(p->first_think_time);
 	while (1)
 	{
