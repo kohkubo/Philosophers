@@ -1,5 +1,5 @@
-#ifndef PHILO_H
-# define PHILO_H
+#ifndef PHILO_BONUS_H
+# define PHILO_BONUS_H
 # include "logging.h"
 # include <pthread.h>
 # include <semaphore.h>
@@ -42,21 +42,23 @@ typedef struct s_data
 	pid_t		process[PN_MAX];
 	sem_t		*forks;
 	sem_t		*print_mutex;
+	sem_t		*dead;
 	bool		dead_flg;
 }				t_data;
 extern t_data	g_p;
 
 bool	is_num_string(char *s);
+int		catch_error(int status, char *title);
 int		ft_atoi(const char *s);
 int64_t	get_time(void);
 pid_t	ft_fork(void);
-pid_t	ft_waitpid(pid_t pid);
 sem_t	*ft_sem_open(char *name, int value);
 void	drop_forks(void);
+void	eat(t_philo *p, int64_t time);
 void	ft_error_exit(const char *s);
-void	ft_sleep(int64_t msec);
-void	grab_forks(t_philo *p);
-void	is_dead(int64_t time, t_philo *p);
-void	kill_all(int id);
+void	ft_void(t_philo *p, int64_t time);
+void	grab_fork(t_philo *p, int64_t time);
+void	kill_all(void);
 void	loop_data(void);
+void	philo_exit(void);
 #endif

@@ -64,6 +64,7 @@ static void	check_nums_and_store(int ac, char **av)
 	errno = 0;
 	g_p.print_mutex = ft_sem_open("/print_mutex", 1);
 	g_p.forks = ft_sem_open("/forks", g_p.main[PN]);
+	g_p.dead = ft_sem_open("/dead", 0);
 	g_p.dead_flg = false;
 	init_philo();
 }

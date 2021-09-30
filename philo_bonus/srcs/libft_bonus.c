@@ -56,27 +56,14 @@ void	ft_error_exit(const char *s)
 		len++;
 	write(2, s, len);
 	write(2, "\n", 1);
-	exit(1);
 	sem_unlink("/print_mutex");
 	sem_unlink("/forks");
+	exit(1);
 }
 
-pid_t	ft_fork(void)
+int	catch_error(int status, char *title)
 {
-	pid_t	pid;
-
-	pid = fork();
-	if (pid == -1)
-		ft_error_exit("Fork error");
-	return (pid);
-}
-
-pid_t	ft_waitpid(pid_t pid)
-{
-	pid_t	status;
-
-	status = waitpid(pid, NULL, 0);
 	if (status == -1)
-		ft_error_exit("Waitpid error");
+		ft_error_exit(title);
 	return (status);
 }

@@ -25,8 +25,8 @@ CFLAGS		= -Wall -Wextra -Werror -O2 -g $(includes:%=-I%) # -fsanitize=thread
 src =\
 	./srcs/libft_bonus.c \
 	./srcs/main_bonus.c \
-	./srcs/philo_loop.c \
-	./srcs/util2_bonus.c \
+	./srcs/philo_act_bonus.c \
+	./srcs/philo_bonus.c \
 	./srcs/util_bonus.c \
 
 # ***********************************
