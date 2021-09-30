@@ -62,7 +62,7 @@ void	is_dead(int64_t time, t_philo *p)
 		time_lag = time - g_p.philos[i].last_eat_time;
 		if (g_p.philos[i].last_eat_time != 0 && time_lag > g_p.main[TD])
 		{
-			printf(RED"%lld %d has died\n"END, time, g_p.philos[i].id);
+			printf(RED"[%lld] %lld %d has died\n"END, time_lag, time, g_p.philos[i].id);
 			g_p.dead_flg = true;
 			// sem_wait(g_p.print_mutex);
 			kill_all(p->id);
