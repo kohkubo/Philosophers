@@ -6,18 +6,18 @@ void	grab_forks(t_philo *p)
 
 	sem_wait(g_p.forks);
 	time = get_time();
-	is_dead(time);
+	is_dead(time, p);
 	printf(GREEN"%lld %d has taken a fork\n"END, time, p->id);
-	sem_wait(&(g_p.forks[p->fork_right]));
+	sem_wait(g_p.forks);
 	time = get_time();
-	is_dead(time);
+	is_dead(time, p);
 	printf(GREEN"%lld %d has taken a fork\n"END, time, p->id);
 }
 
-void	drop_forks(t_philo *p)
+void	drop_forks(void)
 {
-	sem_post(&(g_p.forks[p->fork_left]));
-	sem_post(&(g_p.forks[p->fork_right]));
+	sem_post(g_p.forks);
+	sem_post(g_p.forks);
 }
 
 void	ft_sleep(int64_t msec)
@@ -31,14 +31,29 @@ void	ft_sleep(int64_t msec)
 	}
 }
 
-void	is_dead(int64_t time)
+void	kill_all(int id)
+{
+	int		i;
+
+	i = 0;
+	while (i < g_p.main[PN])
+	{
+		if (i != id)
+			kill(g_p.process[i], SIGKILL);
+		i++;
+	}
+}
+
+void	is_dead(int64_t time, t_philo *p)
 {
 	int64_t	time_lag;
 	int		i;
 
 	if (g_p.dead_flg == true)
 	{
-		sem_post(g_p.print_mutex);
+		// sem_wait(g_p.print_mutex);
+		printf("a1\n");
+		kill_all(p->id);
 		exit(0);
 	}
 	i = 0;
@@ -49,7 +64,9 @@ void	is_dead(int64_t time)
 		{
 			printf(RED"%lld %d has died\n"END, time, g_p.philos[i].id);
 			g_p.dead_flg = true;
-			sem_post(g_p.print_mutex);
+			// sem_wait(g_p.print_mutex);
+			kill_all(p->id);
+			printf("a2\n");
 			exit(0);
 		}
 	}

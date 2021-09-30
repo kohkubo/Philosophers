@@ -9,18 +9,14 @@ static void	philo_eat(t_philo *p)
 	sem_wait(g_p.print_mutex);
 	grab_forks(p);
 	time = get_time();
-	if (is_dead(time))
-	{
-		sem_post(g_p.print_mutex);
-		exit(0);
-	}
+	is_dead(time, p);
 	printf(BLUE"%lld %d is eating\n"END, time, p->id);
 	p->last_eat_time = time;
 	sem_post(g_p.print_mutex);
 	if (g_p.main[EC] != -1 && ++p->eat_count > g_p.main[EC])
 		g_p.dead_flg = true;
 	ft_sleep(g_p.main[TE]);
-	drop_forks(p);
+	drop_forks();
 }
 
 static void	philo_action(t_philo *p, char *msg_fmt, int sleep_time)
@@ -29,14 +25,43 @@ static void	philo_action(t_philo *p, char *msg_fmt, int sleep_time)
 
 	sem_wait(g_p.print_mutex);
 	time = get_time();
-	if (is_dead(time))
-	{
-		sem_post(g_p.print_mutex);
-		exit(0);
-	}
+	is_dead(time, p);
 	printf(msg_fmt, time, p->id);
 	sem_post(g_p.print_mutex);
 	ft_sleep(sleep_time);
+}
+
+void grab_fork(t_philo *p, int64_t time)
+{
+	(void)p;
+	(void)time;
+	sem_wait(g_p.forks);
+}
+
+void ft_void(t_philo *p, int64_t time)
+{
+	(void)p;
+	(void)time;
+}
+
+void	philo_action2(t_philo *p, char *msg_fmt, int sleep_time, void (*f)(t_philo *, int64_t))
+{
+	int64_t	time;
+
+	sem_wait(g_p.print_mutex);
+	time = get_time();
+	f(p, time);
+	is_dead(time, p);
+	printf(msg_fmt, time, p->id);
+	sem_post(g_p.print_mutex);
+	ft_sleep(sleep_time);
+}
+
+void eat(t_philo *p, int64_t time)
+{
+	if (g_p.main[EC] != -1 && ++p->eat_count > g_p.main[EC])
+		g_p.dead_flg = true;
+	p->last_eat_time = time;
 }
 
 static void	*philosopher(void *arg)

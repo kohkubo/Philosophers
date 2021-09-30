@@ -61,8 +61,9 @@ static void	check_nums_and_store(int ac, char **av)
 		ft_error_exit("Invalid arguments: too many philosophers");
 	if (ac == 5)
 		g_p.main[EC] = -1;
-	g_p.print_mutex = sem_open("/print_mutex", O_CREAT, 0644, 0);
-	g_p.forks = sem_open("/forks", O_CREAT, 0644, g_p.main[PN]);
+	errno = 0;
+	g_p.print_mutex = ft_sem_open("/print_mutex", 1);
+	g_p.forks = ft_sem_open("/forks", g_p.main[PN]);
 	g_p.dead_flg = false;
 	init_philo();
 }

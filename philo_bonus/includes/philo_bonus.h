@@ -12,6 +12,7 @@
 # include <stdint.h>
 # include <stdbool.h>
 # include <errno.h>
+# include <signal.h>
 # include <stdlib.h>
 # define PN_MAX 210
 # define DEBUG
@@ -44,19 +45,18 @@ typedef struct s_data
 	bool		dead_flg;
 }				t_data;
 extern t_data	g_p;
-pid_t	ft_fork(void);
-pid_t	ft_fork(void);
-pid_t	ft_waitpid(pid_t pid);
 
 bool	is_num_string(char *s);
 int		ft_atoi(const char *s);
 int64_t	get_time(void);
 pid_t	ft_fork(void);
 pid_t	ft_waitpid(pid_t pid);
-void	drop_forks(t_philo *p);
+sem_t	*ft_sem_open(char *name, int value);
+void	drop_forks(void);
 void	ft_error_exit(const char *s);
 void	ft_sleep(int64_t msec);
 void	grab_forks(t_philo *p);
-void	is_dead(int64_t time);
+void	is_dead(int64_t time, t_philo *p);
+void	kill_all(int id);
 void	loop_data(void);
 #endif
