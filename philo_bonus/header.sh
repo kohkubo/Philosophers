@@ -8,7 +8,7 @@ CURDIR=$PWD
 
 # header make
 
-sed -i '' -E "/^(int|void|size_t|t_.*|char|float|double|struct|unsigned|short|const|long|bool|signed).*;$/d" ${NAME_H}
+sed -i '' -E "/^(int|void|size_t|sem_t|pid_t|t_.*|char|float|double|struct|unsigned|short|const|long|bool|signed).*;$/d" ${NAME_H}
 sed -i '' -e '/#endif/d'  ${NAME_H}
 sed -i '' -E '/^$/d'  ${NAME_H}
 

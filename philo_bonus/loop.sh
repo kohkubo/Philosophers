@@ -1,6 +1,6 @@
 make
 for i in {1..5}; do
-	./philo $1 $2 $3 $4 
+	./philo_bonus $1 $2 $3 $4 
 	echo "+++++"
 	sleep 3
 done
