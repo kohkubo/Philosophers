@@ -31,8 +31,9 @@ void	eat(t_philo *p, int64_t time)
 {
 	if (g_p.main[EC] != -1 && ++p->eat_count > g_p.main[EC])
 	{
-		g_p.dead_flg = true;
-		philo_exit();
+		if (p->eat_count == g_p.main[EC] + 1)
+			philo_exit();
+		exit(0);
 	}
 	p->last_eat_time = time;
 }

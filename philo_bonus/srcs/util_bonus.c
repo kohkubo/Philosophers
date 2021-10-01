@@ -24,6 +24,8 @@ pid_t	ft_fork(void)
 void	philo_exit(void)
 {
 	sem_post(g_p.dead);
+	if (g_p.main[EC] != -1)
+		sem_post(g_p.print_mutex);
 	exit(0);
 }
 
