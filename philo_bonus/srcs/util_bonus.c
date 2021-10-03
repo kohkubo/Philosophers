@@ -21,25 +21,25 @@ pid_t	ft_fork(void)
 	return (pid);
 }
 
-void	philo_exit(void)
+void	philo_exit(t_philo *p)
 {
-	sem_post(g_p.dead);
-	if (g_p.main[EC] != -1)
-		sem_post(g_p.print_mutex);
+	sem_post(p->dead);
+	if (p->main[EC] != -1)
+		sem_post(p->print_mutex);
 	exit(0);
 }
 
-void	kill_all(void)
+void	kill_all(t_data *data)
 {
 	int		i;
 
 	i = 0;
-	while (++i <= g_p.main[PN])
+	while (++i <= data->main[PN])
 	{
-		if (g_p.process[i] != 0)
+		if (data->process[i] != 0)
 		{
-			kill(g_p.process[i], SIGKILL);
-			g_p.process[i] = 0;
+			kill(data->process[i], SIGKILL);
+			data->process[i] = 0;
 		}
 	}
 }
