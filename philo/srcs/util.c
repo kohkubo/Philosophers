@@ -1,87 +1,57 @@
 #include "philo.h"
 
-int	print_usage(void)
+int	ft_error_msg(const char *s)
 {
-	printf("\
-Usage: ./philo PN TD TE TS [EC]\n\n\
-\
-	PN = number of philosophers\n\
-	TD = time to die\n\
-	TE = time to eat\n\
-	TS = time to sleep\n\
-	EC = number of times each philosopher must eat\n");
-	return (0);
+	size_t	len;
+
+	len = 0;
+	while (s[len])
+		len++;
+	write(2, s, len);
+	write(2, "\n", 1);
+	return (1);
 }
 
-void	init_philo(void)
+void	ft_sleep(int64_t msec)
 {
-	int	i;
+	int64_t	now;
 
-	i = 0;
-	while (++i <= g_p.main[PN])
+	now = get_time();
+	while (get_time() - now < msec)
 	{
-		pthread_mutex_init(&(g_p.forks[i]), NULL);
-		g_p.philos[i].id = i;
-		g_p.philos[i].fork_left = i;
-		g_p.philos[i].fork_right = i % g_p.main[PN] + 1;
-		if (g_p.main[PN] % 2 == 0)
-		{
-			if (i % 2 != 0)
-				g_p.philos[i].first_think_time = g_p.main[TE];
-		}
-		else
-		{
-			if (i % 3 == 0)
-				g_p.philos[i].first_think_time = g_p.main[TE];
-			else if (i % 3 == 1)
-				g_p.philos[i].first_think_time = g_p.main[TE] * 2;
-			g_p.philos[i].think_time = 10;
-		}
+		usleep(900);
 	}
 }
 
-int	check_nums_and_store(int ac, char **av)
+bool	is_dead(t_philo *p, int64_t time)
 {
-	int	i;
+	register int64_t	time_lag;
+	register int		i;
 
-	errno = 0;
-	i = 0;
-	while (++i < ac)
+	if (*p->dead_flg == true)
 	{
-		if (!is_num_string(av[i]))
-			return (ft_error_msg("Invalid arguments: not a number"));
-		g_p.main[i] = ft_atoi(av[i]);
-		if (g_p.main[i] < 1)
-			return (ft_error_msg("Invalid arguments: invalid numbers"));
+		return (true);
 	}
-	if (errno)
-		return (ft_error_msg("Invalid arguments: invalid time"));
-	if (PN_MAX < g_p.main[PN])
-		return (ft_error_msg("Invalid arguments: too many philosophers"));
-	if (ac == 5)
-		g_p.main[EC] = -1;
-	pthread_mutex_init(&(g_p.print_mutex), NULL);
-	g_p.dead_flg = false;
-	init_philo();
-	return (0);
+	i = 0;
+	while (++i <= p->main[PN])
+	{
+		time_lag = time - p->last_eat_time[i];
+		if (p->last_eat_time[i] != 0 && time_lag > p->main[TD])
+		{
+			printf(RED"%lld %d has died\n"END, time, i);
+			*p->dead_flg = true;
+			return (true);
+		}
+	}
+	return (false);
 }
 
-int	check_args_and_store(int ac, char **av)
-{
-	if (ac == 1)
-		return (print_usage());
-	if (ac < 5)
-		return (ft_error_msg("Invalid arguments: too few"));
-	else if (ac > 6)
-		return (ft_error_msg("Invalid arguments: too many"));
-	else
-		return (check_nums_and_store(ac, av));
-}
+// bool	is_dead(t_philo *p, int64_t time)
+// {
+// 	register bool	ret;
 
-int64_t	get_time(void)
-{
-	struct timeval	tv;
-
-	gettimeofday(&tv, NULL);
-	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
-}
+// 	pthread_mutex_lock(p->print_mutex);
+// 	ret = is_dead_inner(p, time);
+// 	pthread_mutex_unlock(p->print_mutex);
+// 	return (ret);
+// }

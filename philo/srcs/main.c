@@ -1,93 +1,100 @@
 #include "philo.h"
 
-t_data	g_p = {};
-
-static bool	philo_eat(t_philo *p)
+static int	print_usage(void)
 {
-	int64_t	time;
-
-	pthread_mutex_lock(&g_p.print_mutex);
-	if (grab_forks(p) == false)
-		return (false);
-	time = get_time();
-	if (is_dead(time))
-	{
-		pthread_mutex_unlock(&g_p.print_mutex);
-		return (false);
-	}
-	printf(BLUE"%lld %d is eating\n"END, time, p->id);
-	p->last_eat_time = time;
-	pthread_mutex_unlock(&g_p.print_mutex);
-	if (g_p.main[EC] != -1 && ++p->eat_count > g_p.main[EC])
-		g_p.dead_flg = true;
-	ft_sleep(g_p.main[TE]);
-	drop_forks(p);
-	return (true);
+	printf("\
+Usage: ./philo PN TD TE TS [EC]\n\n\
+\
+	PN = number of philosophers\n\
+	TD = time to die\n\
+	TE = time to eat\n\
+	TS = time to sleep\n\
+	EC = number of times each philosopher must eat\n");
+	return (0);
 }
 
-static bool	philo_action(t_philo *p, char *msg_fmt, int sleep_time)
-{
-	int64_t	time;
-
-	pthread_mutex_lock(&g_p.print_mutex);
-	time = get_time();
-	if (is_dead(time))
-	{
-		pthread_mutex_unlock(&g_p.print_mutex);
-		return (false);
-	}
-	printf(msg_fmt, time, p->id);
-	pthread_mutex_unlock(&g_p.print_mutex);
-	ft_sleep(sleep_time);
-	return (true);
-}
-
-static void	*philosopher(void *arg)
-{
-	t_philo	*p;
-
-	p = (t_philo *)arg;
-	pthread_mutex_lock(&g_p.print_mutex);
-	p->last_eat_time = get_time();
-	pthread_mutex_unlock(&g_p.print_mutex);
-	ft_sleep(p->first_think_time);
-	while (1)
-	{
-		if (!philo_eat(p) || \
-		!philo_action(p, YELLOW"%lld %d is sleeping\n"END, g_p.main[TS]) || \
-		!philo_action(p, MAGENTA"%lld %d is thinking\n"END, p->think_time))
-			break ;
-	}
-	return (NULL);
-}
-
-static int	loop_data(void)
+static void	init_philo(t_data *data)
 {
 	int	i;
 
-	if (g_p.main[PN] == 1)
+	i = 0;
+	pthread_mutex_init(&(data->print_mutex), NULL);
+	data->dead_flg = false;
+	while (++i <= data->main[PN])
 	{
-		ft_sleep(g_p.main[TD]);
-		printf(RED"%lld %d has died\n"END, get_time(), 1);
-		pthread_mutex_destroy(&g_p.forks[1]);
-		return (0);
+		pthread_mutex_init(&(data->forks[i]), NULL);
+		data->philos[i].id = i;
+		data->philos[i].dead_flg = &data->dead_flg;
+		data->philos[i].last_eat_time = data->last_eat_time;
+		data->philos[i].print_mutex = &data->print_mutex;
+		data->philos[i].forks = data->forks;
+		data->philos[i].main[PN] = data->main[PN];
+		data->philos[i].main[TD] = data->main[TD];
+		data->philos[i].main[TE] = data->main[TE];
+		data->philos[i].main[TS] = data->main[TS];
+		data->philos[i].main[EC] = data->main[EC];
+		data->philos[i].fork_left = i;
+		data->philos[i].fork_right = i % data->main[PN] + 1;
+		if (data->main[PN] % 2 == 0)
+		{
+			if (i % 2 != 0)
+				data->philos[i].first_think_time = data->main[TE];
+			// data->philos[i].think_time = 10;
+		}
+		else
+		{
+			if (i % 3 == 0)
+				data->philos[i].first_think_time = data->main[TE];
+			else if (i % 3 == 1)
+				data->philos[i].first_think_time = data->main[TE] * 2;
+			data->philos[i].think_time = 10;
+		}
 	}
+}
+
+static int	check_nums_and_store(int ac, char **av, t_data *data)
+{
+	int	i;
+
+	errno = 0;
 	i = 0;
-	while (++i <= g_p.main[PN])
-		pthread_create(&g_p.threads[i], NULL, philosopher, &g_p.philos[i]);
-	i = 0;
-	while (++i <= g_p.main[PN])
-		pthread_join(g_p.threads[i], NULL);
-	i = 0;
-	while (++i < g_p.main[PN])
-		pthread_detach(g_p.threads[i]), pthread_mutex_destroy(&g_p.forks[i]);
-	pthread_mutex_destroy(&g_p.print_mutex);
+	while (++i < ac)
+	{
+		if (!is_num_string(av[i]))
+			return (ft_error_msg("Invalid arguments: not a number"));
+		data->main[i] = ft_atoi(av[i]);
+		if (data->main[i] < 1)
+			return (ft_error_msg("Invalid arguments: invalid numbers"));
+	}
+	if (errno)
+		return (ft_error_msg("Invalid arguments: invalid time"));
+	if (PN_MAX < data->main[PN])
+		return (ft_error_msg("Invalid arguments: too many philosophers"));
+	if (ac == 5)
+		data->main[EC] = -1;
+	init_philo(data);
+	return (0);
+}
+
+static int	check_ac(int ac)
+{
+	if (ac == 1)
+		return (print_usage());
+	if (ac < 5)
+		return (ft_error_msg("Invalid arguments: too few"));
+	else if (ac > 6)
+		return (ft_error_msg("Invalid arguments: too many"));
 	return (0);
 }
 
 int	main(int ac, char **av)
 {
-	if (check_args_and_store(ac, av))
+	t_data	data;
+
+	memset(&data, 0, sizeof(t_data));
+	if (check_ac(ac))
 		return (1);
-	return (loop_data());
+	if (check_nums_and_store(ac, av, &data))
+		return (1);
+	return (loop_data(&data));
 }

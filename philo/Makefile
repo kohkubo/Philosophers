@@ -18,15 +18,16 @@ obj			= $(src:%.c=%.o)
 # ***********************************
 
 CC 			= gcc
-CFLAGS		= -Wall -Wextra -Werror -O2 -g $(includes:%=-I%) # -fsanitize=thread
+CFLAGS		= -Wall -Wextra -Werror -O2 -g $(includes:%=-I%)  -fsanitize=thread
 
 # ***********************************
 
 src =\
+	./srcs/act.c \
 	./srcs/libft.c \
+	./srcs/loop.c \
 	./srcs/main.c \
 	./srcs/util.c \
-	./srcs/util2.c \
 
 # ***********************************
 
