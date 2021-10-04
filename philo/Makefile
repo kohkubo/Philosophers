@@ -18,7 +18,7 @@ obj			= $(src:%.c=%.o)
 # ***********************************
 
 CC 			= gcc
-CFLAGS		= -Wall -Wextra -Werror -g $(includes:%=-I%) -fsanitize=thread -O2
+CFLAGS		= -Wall -Wextra -Werror -g $(includes:%=-I%) -O2 #-fsanitize=thread -O2
 
 # ***********************************
 

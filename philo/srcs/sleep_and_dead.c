@@ -32,8 +32,6 @@ bool	sleep_and_is_death(t_philo *p, int64_t msec, int id)
 {
 	register int64_t	now;
 	register int64_t	time;
-	(void)id;
-	(void)p;
 
 	now = get_time();
 	while (msec)
@@ -43,10 +41,10 @@ bool	sleep_and_is_death(t_philo *p, int64_t msec, int id)
 		{
 			return (false);
 		}
-		// if (is_dead_mutex(p, time, id))
-		// {
-		// 	return (true);
-		// }
+		if (is_dead_mutex(p, time, id))
+		{
+			return (true);
+		}
 		usleep(1000);
 	}
 	return (false);

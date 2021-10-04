@@ -44,9 +44,9 @@ bool	philo_act(t_philo *p, char *msgfmt, int64_t sleep_time)
 	}
 	printf(msgfmt, time, p->id);
 	pthread_mutex_unlock(p->mutex);
-	ft_sleep(sleep_time);
-	return (false);
-	// return (sleep_and_is_death(p, sleep_time, p->fork_right));
+	// ft_sleep(sleep_time);
+	// return (false);
+	return (sleep_and_is_death(p, sleep_time, p->fork_right));
 }
 
 bool	philo_act_eat(t_philo *p, char *msgfmt, int64_t sleep_time, void (*f)())
@@ -63,7 +63,7 @@ bool	philo_act_eat(t_philo *p, char *msgfmt, int64_t sleep_time, void (*f)())
 	printf(msgfmt, time, p->id);
 	f(p, time);
 	pthread_mutex_unlock(p->mutex);
-	ft_sleep(sleep_time);
-	return (false);
-	// return (sleep_and_is_death(p, sleep_time, p->fork_right));
+	// ft_sleep(sleep_time);
+	// return (false);
+	return (sleep_and_is_death(p, sleep_time, p->fork_right));
 }
