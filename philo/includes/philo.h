@@ -30,8 +30,8 @@ typedef struct s_philo
 	int64_t			think_time;
 	int64_t			first_think_time;
 	int64_t			*last_eat_time;
-	pthread_mutex_t *mutex;
-	pthread_mutex_t *forks;
+	pthread_mutex_t	*mutex;
+	pthread_mutex_t	*forks;
 	bool			*dead_flg;
 	int				fork_left;
 	int				fork_right;
@@ -55,8 +55,7 @@ bool	grab_fork_right(t_philo *p, int fork_id);
 bool	is_dead(t_philo *p, int64_t time, int id);
 bool	is_dead_mutex(t_philo *p, int64_t time, int id);
 bool	is_num_string(char *s);
-bool	philo_act(t_philo *p, char *msgfmt, int64_t sleep_time);
-bool	philo_act_eat(t_philo *p, char *msgfmt, int64_t sleep_time, void (*f)());
+bool	philo_act(t_philo *p, char *msgfmt, int64_t sleep_time, void (*f)());
 bool	sleep_and_is_death(t_philo *p, int64_t msec, int id);
 int		ft_atoi(const char *s);
 int		ft_error_msg(const char *s);
@@ -65,4 +64,5 @@ int64_t	get_time(void);
 void	ft_sleep(int64_t msec);
 void	ft_sleep_philo(t_philo *p, int64_t msec);
 void	philo_eat(t_philo *p, int64_t time);
+void	store_args_data(t_data *data, int i);
 #endif

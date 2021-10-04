@@ -8,7 +8,7 @@ bool	is_dead(t_philo *p, int64_t time, int id)
 	}
 	if ((p->last_eat_time[id] && time - p->last_eat_time[id] > p->main[TD]))
 	{
-		printf(RED"%lld %d has died\n"END, time, id);
+		printf(RED"%lld %03d has died\n"END, time, id);
 		*p->dead_flg = true;
 		return (true);
 	}

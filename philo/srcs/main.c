@@ -19,20 +19,11 @@ static void	init_philo(t_data *data)
 
 	i = 0;
 	pthread_mutex_init(&(data->mutex), NULL);
-	data->dead_flg = false;
 	while (++i <= data->main[PN])
 	{
 		pthread_mutex_init(&(data->forks[i]), NULL);
 		data->philos[i].id = i;
-		data->philos[i].dead_flg = &data->dead_flg;
-		data->philos[i].last_eat_time = data->last_eat_time;
-		data->philos[i].mutex = &data->mutex;
-		data->philos[i].forks = data->forks;
-		data->philos[i].main[PN] = data->main[PN];
-		data->philos[i].main[TD] = data->main[TD];
-		data->philos[i].main[TE] = data->main[TE];
-		data->philos[i].main[TS] = data->main[TS];
-		data->philos[i].main[EC] = data->main[EC];
+		store_args_data(data, i);
 		data->philos[i].fork_left = i;
 		data->philos[i].fork_right = i % data->main[PN] + 1;
 		if (data->main[PN] % 2 == 0)
