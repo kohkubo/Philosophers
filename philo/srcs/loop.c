@@ -1,25 +1,50 @@
 #include "philo.h"
 #include <stdlib.h>
 
+// void *monitor(void *arg)
+// {
+// 	t_philo	*p;
+// 	int64_t	time;
+	
+// 	p = (t_philo *)arg;
+// 	while (1)
+// 	{
+// 		time = get_time();
+// 		pthread_mutex_lock(p->mutex);
+// 		if (is_dead(p, time))
+// 		{
+// 			pthread_mutex_unlock(p->mutex);
+// 			return (NULL);
+// 		}
+// 		pthread_mutex_unlock(p->mutex);
+// 		usleep(1001);
+// 	}
+// 	return (NULL);
+// }
+
 static void	*philosopher(void *arg)
 {
 	t_philo	*p;
 
 	p = (t_philo *)arg;
-	pthread_mutex_lock(p->print_mutex);
+	pthread_mutex_lock(p->mutex);
 	p->last_eat_time[p->id] = get_time();
-	pthread_mutex_unlock(p->print_mutex);
-	if (sleep_and_is_death(p, p->first_think_time))
+	pthread_mutex_unlock(p->mutex);
+	if (sleep_and_is_death(p, p->first_think_time, p->id))
 	{
 		return (NULL);
 	}
 	while (1)
 	{
-		if (grab_forks(p))
+		if (grab_fork_left(p, p->fork_left))
 		{
 			break ;
 		}
-		if (philo_act(p, p->main[TE], philo_eat))
+		if (grab_fork_right(p, p->fork_right))
+		{
+			break ;
+		}
+		if (philo_act(p, BLUE"%lld %d is eating\n"END, p->main[TE], philo_eat))
 		{
 			break ;
 		}
@@ -27,22 +52,24 @@ static void	*philosopher(void *arg)
 		{
 			break ;
 		}
-		if (philo_act(p, p->main[TS], philo_sleep))
+		if (philo_act(p, YELLOW"%lld %d is sleeping\n"END, p->main[TS], NULL))
 		{
 			break ;
 		}
-		if (philo_act(p, p->think_time, philo_think))
+		if (philo_act(p, MAGENTA"%lld %d is thinking\n"END, p->think_time, NULL))
 		{
 			break ;
 		}
-		// if (\
-		// philo_act(p, 0, grab_fork_left) || \
-		// philo_act(p, 0, grab_fork_right) || \
-		// philo_act(p, p->main[TE], philo_eat) || \
-		// drop_forks(p) || \
-		// philo_act(p, p->main[TS], philo_sleep) || \
-		// philo_act(p, p->think_time, philo_think))
-		// 	break ;
+	}
+	if (p->fork_left_flg == true)
+	{
+		pthread_mutex_unlock(&(p->forks[p->fork_left]));
+		// printf("%d : %d : fork_out\n", p->id, p->fork_left);
+	}
+	if (p->fork_right_flg == true)
+	{
+		pthread_mutex_unlock(&(p->forks[p->fork_right]));
+		// printf("%d : %d : fork_out\n", p->id, p->fork_right);
 	}
 	return (NULL);
 }
@@ -64,16 +91,21 @@ int	loop_data(t_data *data)
 	while (++i <= data->main[PN])
 	{
 		pthread_create(&data->threads[i], NULL, philosopher, &data->philos[i]);
+		// pthread_create(&data->monitor[i], NULL, monitor, &data->philos[i]);
 	}
 	i = 0;
 	while (++i <= data->main[PN])
+	{
 		pthread_join(data->threads[i], NULL);
+		// pthread_join(data->monitor[i], NULL);
+	}
 	i = 0;
 	while (++i <= data->main[PN])
 	{
 		pthread_detach(data->threads[i]);
+		// pthread_detach(data->monitor[i]);
 		pthread_mutex_destroy(&data->forks[i]);
 	}
-	pthread_mutex_destroy(&data->print_mutex);
+	pthread_mutex_destroy(&data->mutex);
 	return (0);
 }

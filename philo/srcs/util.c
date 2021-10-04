@@ -12,6 +12,14 @@ int	ft_error_msg(const char *s)
 	return (1);
 }
 
+int64_t	get_time(void)
+{
+	struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
+}
+
 void	ft_sleep(int64_t msec)
 {
 	int64_t	now;
@@ -23,35 +31,20 @@ void	ft_sleep(int64_t msec)
 	}
 }
 
-bool	is_dead(t_philo *p, int64_t time)
+void	ft_sleep_philo(t_philo *p, int64_t msec)
 {
-	register int64_t	time_lag;
-	register int		i;
+	int64_t	now;
 
-	if (*p->dead_flg == true)
+	now = get_time();
+	while (get_time() - now < msec)
 	{
-		return (true);
-	}
-	i = 0;
-	while (++i <= p->main[PN])
-	{
-		time_lag = time - p->last_eat_time[i];
-		if (p->last_eat_time[i] != 0 && time_lag > p->main[TD])
+		pthread_mutex_lock(p->mutex);
+		if (*p->dead_flg == 0)
 		{
-			printf(RED"%lld %d has died\n"END, time, i);
-			*p->dead_flg = true;
-			return (true);
+			pthread_mutex_unlock(p->mutex);
+			break ;
 		}
+		pthread_mutex_unlock(p->mutex);
+		usleep(900);
 	}
-	return (false);
 }
-
-// bool	is_dead(t_philo *p, int64_t time)
-// {
-// 	register bool	ret;
-
-// 	pthread_mutex_lock(p->print_mutex);
-// 	ret = is_dead_inner(p, time);
-// 	pthread_mutex_unlock(p->print_mutex);
-// 	return (ret);
-// }

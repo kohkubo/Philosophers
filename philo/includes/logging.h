@@ -12,4 +12,16 @@
 # define CYAN			"\033[36m"
 # define WHITE			"\033[37m"
 
+// # define END
+// # define BOLD
+// # define BLACK
+// # define RED
+// # define GREEN
+// # define YELLOW
+// # define BLUE
+// # define MAGENTA
+// # define CYAN
+// # define WHITE
+
+
 #endif

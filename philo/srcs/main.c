@@ -18,7 +18,8 @@ static void	init_philo(t_data *data)
 	int	i;
 
 	i = 0;
-	pthread_mutex_init(&(data->print_mutex), NULL);
+	pthread_mutex_init(&(data->mutex), NULL);
+	pthread_mutex_init(&(data->mutex_dead), NULL);
 	data->dead_flg = false;
 	while (++i <= data->main[PN])
 	{
@@ -26,7 +27,8 @@ static void	init_philo(t_data *data)
 		data->philos[i].id = i;
 		data->philos[i].dead_flg = &data->dead_flg;
 		data->philos[i].last_eat_time = data->last_eat_time;
-		data->philos[i].print_mutex = &data->print_mutex;
+		data->philos[i].mutex = &data->mutex;
+		data->philos[i].mutex_dead = &data->mutex_dead;
 		data->philos[i].forks = data->forks;
 		data->philos[i].main[PN] = data->main[PN];
 		data->philos[i].main[TD] = data->main[TD];
@@ -39,7 +41,6 @@ static void	init_philo(t_data *data)
 		{
 			if (i % 2 != 0)
 				data->philos[i].first_think_time = data->main[TE];
-			// data->philos[i].think_time = 10;
 		}
 		else
 		{
@@ -72,7 +73,6 @@ static int	check_nums_and_store(int ac, char **av, t_data *data)
 		return (ft_error_msg("Invalid arguments: too many philosophers"));
 	if (ac == 5)
 		data->main[EC] = -1;
-	init_philo(data);
 	return (0);
 }
 
@@ -96,5 +96,6 @@ int	main(int ac, char **av)
 		return (1);
 	if (check_nums_and_store(ac, av, &data))
 		return (1);
+	init_philo(&data);
 	return (loop_data(&data));
 }

@@ -1,5 +1,5 @@
 make
-for i in {1..5}; do
+for i in {1..10}; do
 	./philo $1 $2 $3 $4 
 	echo "+++++"
 	sleep 3

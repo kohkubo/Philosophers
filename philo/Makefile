@@ -18,7 +18,7 @@ obj			= $(src:%.c=%.o)
 # ***********************************
 
 CC 			= gcc
-CFLAGS		= -Wall -Wextra -Werror -O2 -g $(includes:%=-I%)  -fsanitize=thread
+CFLAGS		= -Wall -Wextra -Werror -g $(includes:%=-I%) -fsanitize=thread
 
 # ***********************************
 
@@ -27,6 +27,7 @@ src =\
 	./srcs/libft.c \
 	./srcs/loop.c \
 	./srcs/main.c \
+	./srcs/sleep_and_dead.c \
 	./srcs/util.c \
 
 # ***********************************
