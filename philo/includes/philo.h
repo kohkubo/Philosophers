@@ -62,7 +62,6 @@ int		ft_error_msg(const char *s);
 int		loop_data(t_data *data);
 int64_t	get_time(void);
 void	ft_sleep(int64_t msec);
-void	ft_sleep_philo(t_philo *p, int64_t msec);
 void	philo_eat(t_philo *p, int64_t time);
 void	store_args_data(t_data *data, int i);
 #endif

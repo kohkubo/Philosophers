@@ -36,7 +36,7 @@ int	loop_data(t_data *data)
 
 	if (data->main[PN] == 1)
 	{
-		ft_sleep(data->main[TD]);
+		usleep(data->main[TD] * 1000);
 		printf(RED"%lld %d has died\n"END, get_time(), 1);
 		pthread_detach(data->threads[1]);
 		pthread_mutex_destroy(&data->forks[1]);

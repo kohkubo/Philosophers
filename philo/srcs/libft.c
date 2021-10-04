@@ -13,6 +13,18 @@ bool	is_num_string(char *s)
 	return (true);
 }
 
+int	ft_error_msg(const char *s)
+{
+	size_t	len;
+
+	len = 0;
+	while (s[len])
+		len++;
+	write(2, s, len);
+	write(2, "\n", 1);
+	return (1);
+}
+
 static int	ft_atoi_overflow(int neg)
 {
 	errno = EINVAL;
