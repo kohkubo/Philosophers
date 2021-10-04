@@ -1,27 +1,6 @@
 #include "philo.h"
 #include <stdlib.h>
 
-// void *monitor(void *arg)
-// {
-// 	t_philo	*p;
-// 	int64_t	time;
-	
-// 	p = (t_philo *)arg;
-// 	while (1)
-// 	{
-// 		time = get_time();
-// 		pthread_mutex_lock(p->mutex);
-// 		if (is_dead(p, time))
-// 		{
-// 			pthread_mutex_unlock(p->mutex);
-// 			return (NULL);
-// 		}
-// 		pthread_mutex_unlock(p->mutex);
-// 		usleep(1001);
-// 	}
-// 	return (NULL);
-// }
-
 static void	*philosopher(void *arg)
 {
 	t_philo	*p;
@@ -47,13 +26,9 @@ static void	*philosopher(void *arg)
 		}
 	}
 	if (p->fork_left_flg == true)
-	{
 		pthread_mutex_unlock(&(p->forks[p->fork_left]));
-	}
 	if (p->fork_right_flg == true)
-	{
 		pthread_mutex_unlock(&(p->forks[p->fork_right]));
-	}
 	return (NULL);
 }
 
@@ -63,7 +38,6 @@ int	loop_data(t_data *data)
 
 	if (data->main[PN] == 1)
 	{
-		// TODO
 		ft_sleep(data->main[TD]);
 		printf(RED"%lld %d has died\n"END, get_time(), 1);
 		pthread_detach(data->threads[1]);

@@ -2,16 +2,13 @@
 
 bool	is_dead(t_philo *p, int64_t time, int id)
 {
-	register int64_t	time_lag;
-
 	if (*p->dead_flg == true)
 	{
 		return (true);
 	}
-	time_lag = time - p->last_eat_time[id];
-	if ((p->last_eat_time[id] && time_lag > p->main[TD]))
+	if ((p->last_eat_time[id] && time - p->last_eat_time[id] > p->main[TD]))
 	{
-		printf(RED"[%lld] %lld %d has died\n"END, time_lag, time, id);
+		printf(RED"%lld %d has died\n"END, time, id);
 		*p->dead_flg = true;
 		return (true);
 	}
