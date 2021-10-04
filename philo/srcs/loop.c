@@ -36,27 +36,12 @@ static void	*philosopher(void *arg)
 	}
 	while (1)
 	{
-		if (grab_fork_left(p, p->fork_left))
-		{
-			break ;
-		}
-		if (grab_fork_right(p, p->fork_right))
-		{
-			break ;
-		}
-		if (philo_act(p, BLUE"%lld %d is eating\n"END, p->main[TE], philo_eat))
-		{
-			break ;
-		}
-		if (drop_forks(p))
-		{
-			break ;
-		}
-		if (philo_act(p, YELLOW"%lld %d is sleeping\n"END, p->main[TS], NULL))
-		{
-			break ;
-		}
-		if (philo_act(p, MAGENTA"%lld %d is thinking\n"END, p->think_time, NULL))
+		if (grab_fork_left(p, p->fork_left)
+		|| grab_fork_right(p, p->fork_right)
+		|| philo_act_eat(p, BLUE"%lld %d is eating\n"END, p->main[TE], philo_eat)
+		|| drop_forks(p)
+		|| philo_act(p, YELLOW"%lld %d is sleeping\n"END, p->main[TS])
+		|| philo_act(p, MAGENTA"%lld %d is thinking\n"END, p->think_time))
 		{
 			break ;
 		}
