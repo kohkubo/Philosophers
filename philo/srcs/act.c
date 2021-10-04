@@ -2,7 +2,6 @@
 
 bool	grab_fork_left(t_philo *p, int fork_id)
 {
-	// printf("%d : %d : fork grab\n", p->id, fork_id);
 	pthread_mutex_lock(&(p->forks[fork_id]));
 	p->fork_left_flg = true;
 	return (philo_act(p, GREEN"%lld %d has taken a fork\n"END, 0));
@@ -10,7 +9,6 @@ bool	grab_fork_left(t_philo *p, int fork_id)
 
 bool	grab_fork_right(t_philo *p, int fork_id)
 {
-	// printf("%d : %d : fork grab\n", p->id, fork_id);
 	pthread_mutex_lock(&(p->forks[fork_id]));
 	p->fork_right_flg = true;
 	return (philo_act(p, GREEN"%lld %d has taken a fork\n"END, 0));
@@ -27,17 +25,15 @@ void	philo_eat(t_philo *p, int64_t time)
 bool	drop_forks(t_philo *p)
 {
 	pthread_mutex_unlock(&(p->forks[p->fork_left]));
-	// printf("%d : %d : fork_out\n", p->id, p->fork_left);
 	p->fork_left_flg = false;
 	pthread_mutex_unlock(&(p->forks[p->fork_right]));
-	// printf("%d : %d : fork_out\n", p->id, p->fork_right);
 	p->fork_right_flg = false;
 	return (false);
 }
 
 bool	philo_act(t_philo *p, char *msgfmt, int64_t sleep_time)
 {
-	int64_t	time;
+	register int64_t	time;
 
 	pthread_mutex_lock(p->mutex);
 	time = get_time();
@@ -48,12 +44,14 @@ bool	philo_act(t_philo *p, char *msgfmt, int64_t sleep_time)
 	}
 	printf(msgfmt, time, p->id);
 	pthread_mutex_unlock(p->mutex);
-	return (sleep_and_is_death(p, sleep_time, p->id));
+	ft_sleep(sleep_time);
+	return (false);
+	// return (sleep_and_is_death(p, sleep_time, p->fork_right));
 }
 
 bool	philo_act_eat(t_philo *p, char *msgfmt, int64_t sleep_time, void (*f)())
 {
-	int64_t	time;
+	register int64_t	time;
 
 	pthread_mutex_lock(p->mutex);
 	time = get_time();
@@ -65,5 +63,7 @@ bool	philo_act_eat(t_philo *p, char *msgfmt, int64_t sleep_time, void (*f)())
 	printf(msgfmt, time, p->id);
 	f(p, time);
 	pthread_mutex_unlock(p->mutex);
-	return (sleep_and_is_death(p, sleep_time, p->id));
+	ft_sleep(sleep_time);
+	return (false);
+	// return (sleep_and_is_death(p, sleep_time, p->fork_right));
 }

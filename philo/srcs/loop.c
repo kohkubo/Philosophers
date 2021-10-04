@@ -49,12 +49,10 @@ static void	*philosopher(void *arg)
 	if (p->fork_left_flg == true)
 	{
 		pthread_mutex_unlock(&(p->forks[p->fork_left]));
-		// printf("%d : %d : fork_out\n", p->id, p->fork_left);
 	}
 	if (p->fork_right_flg == true)
 	{
 		pthread_mutex_unlock(&(p->forks[p->fork_right]));
-		// printf("%d : %d : fork_out\n", p->id, p->fork_right);
 	}
 	return (NULL);
 }

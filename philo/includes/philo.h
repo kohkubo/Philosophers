@@ -31,7 +31,6 @@ typedef struct s_philo
 	int64_t			first_think_time;
 	int64_t			*last_eat_time;
 	pthread_mutex_t *mutex;
-	pthread_mutex_t *mutex_dead;
 	pthread_mutex_t *forks;
 	bool			*dead_flg;
 	int				fork_left;
@@ -42,14 +41,11 @@ typedef struct s_philo
 typedef struct s_data
 {
 	int64_t			main[ANK];
-	int				id;
 	t_philo			philos[PN_MAX];
 	int64_t			last_eat_time[PN_MAX];
 	pthread_t		threads[PN_MAX];
-	pthread_t		monitor[PN_MAX];
 	pthread_mutex_t	forks[PN_MAX];
 	pthread_mutex_t	mutex;
-	pthread_mutex_t	mutex_dead;
 	bool			dead_flg;
 }	t_data;
 
