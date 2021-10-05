@@ -31,17 +31,17 @@ pid_t	ft_fork(void)
 
 void	store_sleeptime(t_data *data, int i)
 {
-	if (data->main[PN] % 2 == 0)
+	if (data->main[PHILO_NUM] % 2 == 0)
 	{
 		if (i % 2 != 0)
-			data->philos[i].first_think_time = data->main[TE];
+			data->philos[i].first_think_time = data->main[TIME_EAT];
 	}
 	else
 	{
 		if (i % 3 == 0)
-			data->philos[i].first_think_time = data->main[TE];
+			data->philos[i].first_think_time = data->main[TIME_EAT];
 		else if (i % 3 == 1)
-			data->philos[i].first_think_time = data->main[TE] * 2;
+			data->philos[i].first_think_time = data->main[TIME_EAT] * 2;
 		data->philos[i].think_time = 10;
 	}
 }

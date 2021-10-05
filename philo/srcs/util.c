@@ -25,9 +25,9 @@ void	store_args_data(t_data *data, int i)
 	data->philos[i].dead_flg = &data->dead_flg;
 	data->philos[i].mutex = &data->mutex;
 	data->philos[i].forks = data->forks;
-	data->philos[i].main[PN] = data->main[PN];
-	data->philos[i].main[TD] = data->main[TD];
-	data->philos[i].main[TE] = data->main[TE];
-	data->philos[i].main[TS] = data->main[TS];
+	data->philos[i].main[PHILO_NUM] = data->main[PHILO_NUM];
+	data->philos[i].main[TIME_DIE] = data->main[TIME_DIE];
+	data->philos[i].main[TIME_EAT] = data->main[TIME_EAT];
+	data->philos[i].main[TIME_SLEEP] = data->main[TIME_SLEEP];
 	data->philos[i].main[EC] = data->main[EC];
 }

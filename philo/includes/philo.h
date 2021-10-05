@@ -15,10 +15,10 @@
 # define DEBUG
 enum	e_data
 {
-	PN = 1,
-	TD,
-	TE,
-	TS,
+	PHILO_NUM = 1,
+	TIME_DIE,
+	TIME_EAT,
+	TIME_SLEEP,
 	EC,
 	ANK
 };

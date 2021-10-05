@@ -15,9 +15,9 @@ static void	*philosopher(void *arg)
 	{
 		if (grab_fork_left(p, p->fork_left) || \
 		grab_fork_right(p, p->fork_right) || \
-		philo_act(p, BLUE"%lld %03d is eating\n"END, p->main[TE], philo_eat) || \
+		philo_act(p, BLUE"%lld %03d is eating\n"END, p->main[TIME_EAT], philo_eat) || \
 		drop_forks(p) || \
-		philo_act(p, YELLOW"%lld %03d is sleeping\n"END, p->main[TS], NULL) || \
+		philo_act(p, YELLOW"%lld %03d is sleeping\n"END, p->main[TIME_SLEEP], NULL) || \
 		philo_act(p, MAGENTA"%lld %03d is thinking\n"END, p->think_time, NULL))
 		{
 			break ;
@@ -34,22 +34,22 @@ int	loop_data(t_data *data)
 {
 	int	i;
 
-	if (data->main[PN] == 1)
+	if (data->main[PHILO_NUM] == 1)
 	{
-		usleep(data->main[TD] * 1000);
+		usleep(data->main[TIME_DIE] * 1000);
 		printf(RED"%lld %d has died\n"END, get_time(), 1);
 		pthread_detach(data->threads[1]);
 		pthread_mutex_destroy(&data->forks[1]);
 		return (0);
 	}
 	i = 0;
-	while (++i <= data->main[PN])
+	while (++i <= data->main[PHILO_NUM])
 		pthread_create(&data->threads[i], NULL, philosopher, &data->philos[i]);
 	i = 0;
-	while (++i <= data->main[PN])
+	while (++i <= data->main[PHILO_NUM])
 		pthread_join(data->threads[i], NULL);
 	i = 0;
-	while (++i <= data->main[PN])
+	while (++i <= data->main[PHILO_NUM])
 	{
 		pthread_detach(data->threads[i]);
 		pthread_mutex_destroy(&data->forks[i]);

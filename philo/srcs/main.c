@@ -19,24 +19,24 @@ static void	init_philo(t_data *data)
 
 	i = 0;
 	pthread_mutex_init(&(data->mutex), NULL);
-	while (++i <= data->main[PN])
+	while (++i <= data->main[PHILO_NUM])
 	{
 		pthread_mutex_init(&(data->forks[i]), NULL);
 		data->philos[i].id = i;
 		store_args_data(data, i);
 		data->philos[i].fork_left = i;
-		data->philos[i].fork_right = i % data->main[PN] + 1;
-		if (data->main[PN] % 2 == 0)
+		data->philos[i].fork_right = i % data->main[PHILO_NUM] + 1;
+		if (data->main[PHILO_NUM] % 2 == 0)
 		{
 			if (i % 2 != 0)
-				data->philos[i].first_think_time = data->main[TE];
+				data->philos[i].first_think_time = data->main[TIME_EAT];
 		}
 		else
 		{
 			if (i % 3 == 0)
-				data->philos[i].first_think_time = data->main[TE];
+				data->philos[i].first_think_time = data->main[TIME_EAT];
 			else if (i % 3 == 1)
-				data->philos[i].first_think_time = data->main[TE] * 2;
+				data->philos[i].first_think_time = data->main[TIME_EAT] * 2;
 			data->philos[i].think_time = 10;
 		}
 	}
@@ -58,7 +58,7 @@ static int	check_nums_and_store(int ac, char **av, t_data *data)
 	}
 	if (errno)
 		return (ft_error_msg("Invalid arguments: invalid time"));
-	if (PN_MAX < data->main[PN])
+	if (PN_MAX < data->main[PHILO_NUM])
 		return (ft_error_msg("Invalid arguments: too many philosophers"));
 	if (ac == 5)
 		data->main[EC] = -1;

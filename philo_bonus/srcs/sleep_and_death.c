@@ -27,7 +27,7 @@ void	is_dead(t_philo *p, int64_t time, int id)
 	{
 		philo_exit(p);
 	}
-	if ((p->last_eat_time[id] && time - p->last_eat_time[id] > p->main[TD]))
+	if ((p->last_eat_time[id] && time - p->last_eat_time[id] > p->main[TIME_DIE]))
 	{
 		printf(RED"%lld %03d has died\n"END, time, id);
 		*p->dead_flg = true;
@@ -48,7 +48,7 @@ void	kill_all(t_data *data)
 	int		i;
 
 	i = 0;
-	while (++i <= data->main[PN])
+	while (++i <= data->main[PHILO_NUM])
 	{
 		if (data->process[i] != 0)
 		{

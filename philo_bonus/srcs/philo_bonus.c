@@ -18,9 +18,9 @@ static void	philosopher(void *arg)
 	{
 		grab_fork(p);
 		grab_fork(p);
-		philo_act(p, BLUE"%lld %03d is eating\n"END, p->main[TE], eat);
+		philo_act(p, BLUE"%lld %03d is eating\n"END, p->main[TIME_EAT], eat);
 		drop_forks(p);
-		philo_act(p, YELLOW"%lld %03d is sleeping\n"END, p->main[TS], ft_void);
+		philo_act(p, YELLOW"%lld %03d is sleeping\n"END, p->main[TIME_SLEEP], ft_void);
 		philo_act(p, MAGENTA"%lld %03d is thinking\n"END, \
 		p->think_time, ft_void);
 	}
@@ -31,14 +31,14 @@ void	loop_data(t_data *data)
 {
 	int	i;
 
-	if (data->main[PN] == 1)
+	if (data->main[PHILO_NUM] == 1)
 	{
-		usleep(data->main[TD] * 1000);
+		usleep(data->main[TIME_DIE] * 1000);
 		printf(RED"%lld %03d has died\n"END, get_time(), 1);
 		sem_unlink_all(), exit(0);
 	}
 	i = 0;
-	while (++i <= data->main[PN])
+	while (++i <= data->main[PHILO_NUM])
 	{
 		data->process[i] = ft_fork();
 		if (data->process[i] == CHILD)
@@ -47,7 +47,7 @@ void	loop_data(t_data *data)
 	if (data->main[EC] != -1)
 	{
 		i = 0;
-		while (++i <= data->main[PN])
+		while (++i <= data->main[PHILO_NUM])
 			sem_wait(data->eat_count_sem);
 		sem_post(data->dead);
 	}
