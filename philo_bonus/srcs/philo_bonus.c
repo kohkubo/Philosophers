@@ -1,19 +1,6 @@
 #include "philo_bonus.h"
 #define CHILD 0
 
-static void	philo_act(t_philo *p, char *msg_fmt, int sleep_time, void (*f)())
-{
-	register int64_t	time;
-
-	sem_wait(p->mutex);
-	time = get_time();
-	is_dead(p, time, p->id);
-	f(p, time);
-	printf(msg_fmt, time, p->id);
-	sem_post(p->mutex);
-	sleep_and_is_death(p, sleep_time);
-}
-
 static void	philosopher(void *arg)
 {
 	t_philo	*p;

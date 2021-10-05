@@ -67,6 +67,7 @@ void	grab_fork(t_philo *p);
 void	is_dead(t_philo *p, int64_t time, int id);
 void	kill_all(t_data *data);
 void	loop_data(t_data *data);
+void	philo_act(t_philo *p, char *msg_fmt, int sleep_time, void (*f)());
 void	philo_exit(t_philo *p);
 void	sleep_and_is_death(t_philo *p, int64_t msec);
 void	store_sleeptime(t_data *data, int i);

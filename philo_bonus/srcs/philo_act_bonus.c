@@ -1,12 +1,25 @@
 #include "philo_bonus.h"
 
+void	philo_act(t_philo *p, char *msg_fmt, int sleep_time, void (*f)())
+{
+	register int64_t	time;
+
+	sem_wait(p->mutex);
+	time = get_time();
+	is_dead(p, time, p->id);
+	f(p, time);
+	printf(msg_fmt, time, p->id);
+	sem_post(p->mutex);
+	sleep_and_is_death(p, sleep_time);
+}
+
 void	grab_fork(t_philo *p)
 {
 	int64_t	time;
 
 	sem_wait(p->forks);
-	time = get_time();
 	sem_wait(p->mutex);
+	time = get_time();
 	is_dead(p, time, p->id);
 	printf(GREEN"%lld %03d has taken a fork\n"END, time, p->id);
 	sem_post(p->mutex);
