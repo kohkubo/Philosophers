@@ -1,5 +1,13 @@
 #include "philo_bonus.h"
 
+int64_t	get_time(void)
+{
+	struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
+}
+
 sem_t	*ft_sem_open(char *name, int value)
 {
 	sem_t	*sem;
@@ -21,29 +29,6 @@ pid_t	ft_fork(void)
 	return (pid);
 }
 
-void	philo_exit(t_philo *p)
-{
-	sem_post(p->dead);
-	if (p->main[EC] != -1)
-		sem_post(p->mutex);
-	exit(0);
-}
-
-void	kill_all(t_data *data)
-{
-	int		i;
-
-	i = 0;
-	while (++i <= data->main[PN])
-	{
-		if (data->process[i] != 0)
-		{
-			kill(data->process[i], SIGKILL);
-			data->process[i] = 0;
-		}
-	}
-}
-
 void	store_sleeptime(t_data *data, int i)
 {
 	if (data->main[PN] % 2 == 0)
@@ -59,4 +44,12 @@ void	store_sleeptime(t_data *data, int i)
 			data->philos[i].first_think_time = data->main[TE] * 2;
 		data->philos[i].think_time = 10;
 	}
+}
+
+void	sem_unlink_all(void)
+{
+	sem_unlink("/mutex");
+	sem_unlink("/forks");
+	sem_unlink("/dead");
+	sem_unlink("/eat_count");
 }

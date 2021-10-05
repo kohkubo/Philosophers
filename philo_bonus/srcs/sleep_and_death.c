@@ -1,13 +1,5 @@
 #include "philo_bonus.h"
 
-int64_t	get_time(void)
-{
-	struct timeval	tv;
-
-	gettimeofday(&tv, NULL);
-	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
-}
-
 void	sleep_and_is_death(t_philo *p, int64_t msec)
 {
 	register int64_t	now;
@@ -40,5 +32,29 @@ void	is_dead(t_philo *p, int64_t time, int id)
 		printf(RED"%lld %03d has died\n"END, time, id);
 		*p->dead_flg = true;
 		philo_exit(p);
+	}
+}
+
+void	philo_exit(t_philo *p)
+{
+	printf("philo_exit\n");
+	sem_post(p->dead);
+	if (p->main[EC] != -1)
+		sem_post(p->mutex);
+	exit(0);
+}
+
+void	kill_all(t_data *data)
+{
+	int		i;
+
+	i = 0;
+	while (++i <= data->main[PN])
+	{
+		if (data->process[i] != 0)
+		{
+			kill(data->process[i], SIGKILL);
+			data->process[i] = 0;
+		}
 	}
 }

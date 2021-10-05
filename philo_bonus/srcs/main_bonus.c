@@ -26,6 +26,7 @@ static void	init_philo(t_data *data)
 		data->philos[i].forks = data->forks;
 		data->philos[i].mutex = data->mutex;
 		data->philos[i].dead = data->dead;
+		data->philos[i].eat_count_sem = data->eat_count_sem;
 		data->philos[i].main[PN] = data->main[PN];
 		data->philos[i].main[TD] = data->main[TD];
 		data->philos[i].main[TE] = data->main[TE];
@@ -57,7 +58,8 @@ static void	check_nums_and_store(t_data *data, int ac, char **av)
 		ft_error_exit("Invalid arguments: too many philosophers");
 	if (ac == 5)
 		data->main[EC] = -1;
-	errno = 0;
+	else
+		data->eat_count_sem = ft_sem_open("/eat_count", 0);
 	data->mutex = ft_sem_open("/mutex", 1);
 	data->forks = ft_sem_open("/forks", data->main[PN]);
 	data->dead = ft_sem_open("/dead", 0);

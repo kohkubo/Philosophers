@@ -7,8 +7,8 @@ void	philo_act(t_philo *p, char *msg_fmt, int sleep_time, void (*f)())
 	sem_wait(p->mutex);
 	time = get_time();
 	is_dead(p, time, p->id);
-	f(p, time);
 	printf(msg_fmt, time, p->id);
+	f(p, time);
 	sem_post(p->mutex);
 	sleep_and_is_death(p, sleep_time);
 }
@@ -39,10 +39,11 @@ void	ft_void(t_philo *p, int64_t time)
 
 void	eat(t_philo *p, int64_t time)
 {
-	if (p->main[EC] != -1 && ++p->eat_count > p->main[EC])
+	if (p->main[EC] != -1 && ++p->eat_count >= p->main[EC])
 	{
-		if (p->eat_count == p->main[EC] + 1)
-			philo_exit(p);
+		sem_post(p->eat_count_sem);
+		drop_forks(p);
+		sem_post(p->mutex);
 		exit(0);
 	}
 	p->last_eat_time[p->id] = time;

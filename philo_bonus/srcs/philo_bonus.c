@@ -35,23 +35,22 @@ void	loop_data(t_data *data)
 	{
 		usleep(data->main[TD] * 1000);
 		printf(RED"%lld %03d has died\n"END, get_time(), 1);
-		sem_unlink("/mutex");
-		sem_unlink("/forks");
-		sem_unlink("/dead");
-		exit(0);
+		sem_unlink_all(), exit(0);
 	}
 	i = 0;
 	while (++i <= data->main[PN])
 	{
 		data->process[i] = ft_fork();
 		if (data->process[i] == CHILD)
-		{
 			philosopher(&data->philos[i]);
-		}
+	}
+	if (data->main[EC] != -1)
+	{
+		i = 0;
+		while (++i <= data->main[PN])
+			sem_wait(data->eat_count_sem);
+		sem_post(data->dead);
 	}
 	sem_wait(data->dead);
-	kill_all(data);
-	sem_unlink("/mutex");
-	sem_unlink("/forks");
-	sem_unlink("/dead");
+	kill_all(data), sem_unlink_all();
 }

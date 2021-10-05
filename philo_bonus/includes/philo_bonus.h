@@ -37,6 +37,7 @@ typedef struct s_philo
 	sem_t		*forks;
 	sem_t		*mutex;
 	sem_t		*dead;
+	sem_t		*eat_count_sem;
 	bool		*dead_flg;
 	int			left_philo;
 	int			right_philo;
@@ -50,6 +51,7 @@ typedef struct s_data
 	sem_t		*forks;
 	sem_t		*mutex;
 	sem_t		*dead;
+	sem_t		*eat_count_sem;
 	bool		dead_flg;
 }				t_data;
 
@@ -69,6 +71,7 @@ void	kill_all(t_data *data);
 void	loop_data(t_data *data);
 void	philo_act(t_philo *p, char *msg_fmt, int sleep_time, void (*f)());
 void	philo_exit(t_philo *p);
+void	sem_unlink_all(void);
 void	sleep_and_is_death(t_philo *p, int64_t msec);
 void	store_sleeptime(t_data *data, int i);
 #endif
