@@ -31,8 +31,8 @@ static void	init_philo(t_data *data)
 		data->philos[i].main[TE] = data->main[TE];
 		data->philos[i].main[TS] = data->main[TS];
 		data->philos[i].main[EC] = data->main[EC];
-		data->philos[i].fork_left = i;
-		data->philos[i].fork_right = i % data->main[PN] + 1;
+		data->philos[i].left_philo = i;
+		data->philos[i].right_philo = i % data->main[PN] + 1;
 		store_sleeptime(data, i);
 	}
 }

@@ -7,8 +7,8 @@ void	grab_fork(t_philo *p)
 	sem_wait(p->forks);
 	time = get_time();
 	sem_wait(p->mutex);
-	is_dead(p, time);
-	printf(GREEN"%lld %d has taken a fork\n"END, time, p->id);
+	is_dead(p, time, p->id);
+	printf(GREEN"%lld %03d has taken a fork\n"END, time, p->id);
 	sem_post(p->mutex);
 }
 

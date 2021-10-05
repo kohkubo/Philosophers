@@ -1,14 +1,13 @@
 #include "philo_bonus.h"
 #define CHILD 0
 
-static void	philo_act(t_philo *p, char *msg_fmt, int sleep_time, void \
-(*f)(t_philo *, int64_t))
+static void	philo_act(t_philo *p, char *msg_fmt, int sleep_time, void (*f)())
 {
 	register int64_t	time;
 
 	sem_wait(p->mutex);
 	time = get_time();
-	is_dead(p, time);
+	is_dead(p, time, p->id);
 	f(p, time);
 	printf(msg_fmt, time, p->id);
 	sem_post(p->mutex);
@@ -32,10 +31,11 @@ static void	philosopher(void *arg)
 	{
 		grab_fork(p);
 		grab_fork(p);
-		philo_act(p, BLUE"%lld %d is eating\n"END, p->main[TE], eat);
+		philo_act(p, BLUE"%lld %03d is eating\n"END, p->main[TE], eat);
 		drop_forks(p);
-		philo_act(p, YELLOW"%lld %d is sleeping\n"END, p->main[TS], ft_void);
-		philo_act(p, MAGENTA"%lld %d is thinking\n"END, p->think_time, ft_void);
+		philo_act(p, YELLOW"%lld %03d is sleeping\n"END, p->main[TS], ft_void);
+		philo_act(p, MAGENTA"%lld %03d is thinking\n"END, \
+		p->think_time, ft_void);
 	}
 	exit(0);
 }
@@ -46,8 +46,8 @@ void	loop_data(t_data *data)
 
 	if (data->main[PN] == 1)
 	{
-		ft_sleep(data->main[TD]);
-		printf(RED"%lld %d has died\n"END, get_time(), 1);
+		usleep(data->main[TD] * 1000);
+		printf(RED"%lld %03d has died\n"END, get_time(), 1);
 		sem_unlink("/mutex");
 		sem_unlink("/forks");
 		sem_unlink("/dead");

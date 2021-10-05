@@ -38,8 +38,8 @@ typedef struct s_philo
 	sem_t		*mutex;
 	sem_t		*dead;
 	bool		*dead_flg;
-	int			fork_left;
-	int			fork_right;
+	int			left_philo;
+	int			right_philo;
 }				t_philo;
 typedef struct s_data
 {
@@ -62,10 +62,9 @@ sem_t	*ft_sem_open(char *name, int value);
 void	drop_forks(t_philo *p);
 void	eat(t_philo *p, int64_t time);
 void	ft_error_exit(const char *s);
-void	ft_sleep(int64_t msec);
 void	ft_void(t_philo *p, int64_t time);
 void	grab_fork(t_philo *p);
-void	is_dead(t_philo *p, int64_t time);
+void	is_dead(t_philo *p, int64_t time, int id);
 void	kill_all(t_data *data);
 void	loop_data(t_data *data);
 void	philo_exit(t_philo *p);
