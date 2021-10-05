@@ -35,7 +35,7 @@ typedef struct s_philo
 	int64_t		first_think_time;
 	int64_t		*last_eat_time;
 	sem_t		*forks;
-	sem_t		*print_mutex;
+	sem_t		*mutex;
 	sem_t		*dead;
 	bool		*dead_flg;
 	int			fork_left;
@@ -48,11 +48,10 @@ typedef struct s_data
 	int64_t		last_eat_time[PN_MAX];
 	pid_t		process[PN_MAX];
 	sem_t		*forks;
-	sem_t		*print_mutex;
+	sem_t		*mutex;
 	sem_t		*dead;
 	bool		dead_flg;
 }				t_data;
-extern t_data	g_p;
 
 bool	is_num_string(char *s);
 int		catch_error(int status, char *title);
@@ -65,11 +64,11 @@ void	eat(t_philo *p, int64_t time);
 void	ft_error_exit(const char *s);
 void	ft_sleep(int64_t msec);
 void	ft_void(t_philo *p, int64_t time);
-void	grab_fork(t_philo *p, int64_t time);
-void	grab_forks(t_philo *p);
+void	grab_fork(t_philo *p);
 void	is_dead(t_philo *p, int64_t time);
 void	kill_all(t_data *data);
 void	loop_data(t_data *data);
 void	philo_exit(t_philo *p);
 void	sleep_and_is_death(t_philo *p, int64_t msec);
+void	store_sleeptime(t_data *data, int i);
 #endif

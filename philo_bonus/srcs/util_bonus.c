@@ -25,7 +25,7 @@ void	philo_exit(t_philo *p)
 {
 	sem_post(p->dead);
 	if (p->main[EC] != -1)
-		sem_post(p->print_mutex);
+		sem_post(p->mutex);
 	exit(0);
 }
 
@@ -42,4 +42,29 @@ void	kill_all(t_data *data)
 			data->process[i] = 0;
 		}
 	}
+}
+
+void	store_sleeptime(t_data *data, int i)
+{
+	if (data->main[PN] % 2 == 0)
+	{
+		if (i % 2 != 0)
+			data->philos[i].first_think_time = data->main[TE];
+	}
+	else
+	{
+		if (i % 3 == 0)
+			data->philos[i].first_think_time = data->main[TE];
+		else if (i % 3 == 1)
+			data->philos[i].first_think_time = data->main[TE] * 2;
+		data->philos[i].think_time = 10;
+	}
+}
+
+int64_t	get_time(void)
+{
+	struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }

@@ -56,7 +56,7 @@ void	ft_error_exit(const char *s)
 		len++;
 	write(2, s, len);
 	write(2, "\n", 1);
-	sem_unlink("/print_mutex");
+	sem_unlink("/mutex");
 	sem_unlink("/forks");
 	exit(1);
 }

@@ -1,7 +1,5 @@
 #include "philo_bonus.h"
 
-t_data	g_p = {};
-
 static void	print_usage_exit(void)
 {
 	printf("\
@@ -26,7 +24,7 @@ static void	init_philo(t_data *data)
 		data->philos[i].dead_flg = &data->dead_flg;
 		data->philos[i].last_eat_time = data->last_eat_time;
 		data->philos[i].forks = data->forks;
-		data->philos[i].print_mutex = data->print_mutex;
+		data->philos[i].mutex = data->mutex;
 		data->philos[i].dead = data->dead;
 		data->philos[i].main[PN] = data->main[PN];
 		data->philos[i].main[TD] = data->main[TD];
@@ -35,19 +33,7 @@ static void	init_philo(t_data *data)
 		data->philos[i].main[EC] = data->main[EC];
 		data->philos[i].fork_left = i;
 		data->philos[i].fork_right = i % data->main[PN] + 1;
-		if (data->main[PN] % 2 == 0)
-		{
-			if (i % 2 != 0)
-				data->philos[i].first_think_time = data->main[TE];
-		}
-		else
-		{
-			if (i % 3 == 0)
-				data->philos[i].first_think_time = data->main[TE];
-			else if (i % 3 == 1)
-				data->philos[i].first_think_time = data->main[TE] * 2;
-			data->philos[i].think_time = 10;
-		}
+		store_sleeptime(data, i);
 	}
 }
 
@@ -72,11 +58,10 @@ static void	check_nums_and_store(t_data *data, int ac, char **av)
 	if (ac == 5)
 		data->main[EC] = -1;
 	errno = 0;
-	data->print_mutex = ft_sem_open("/print_mutex", 1);
+	data->mutex = ft_sem_open("/mutex", 1);
 	data->forks = ft_sem_open("/forks", data->main[PN]);
 	data->dead = ft_sem_open("/dead", 0);
 	data->dead_flg = false;
-	init_philo(data);
 }
 
 static void	check_ac(int ac)
@@ -96,6 +81,7 @@ int	main(int ac, char **av)
 	memset(&data, 0, sizeof(t_data));
 	check_ac(ac);
 	check_nums_and_store(&data, ac, av);
+	init_philo(&data);
 	loop_data(&data);
 	return (0);
 }

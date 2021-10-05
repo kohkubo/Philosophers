@@ -27,6 +27,7 @@ src =\
 	./srcs/main_bonus.c \
 	./srcs/philo_act_bonus.c \
 	./srcs/philo_bonus.c \
+	./srcs/sleep_and_death.c \
 	./srcs/util_bonus.c \
 
 # ***********************************
