@@ -1,7 +1,0 @@
-{
-	"files.associations": {
-		"*.def": "c",
-		"philo.h": "c",
-		"philo_bonus.h": "c"
-	}
-}
