@@ -44,7 +44,7 @@ void	loop_data(t_data *data)
 		if (data->process[i] == CHILD)
 			philosopher(&data->philos[i]);
 	}
-	if (data->main[EC] != -1)
+	if (data->main[EAT_COUNT] != -1)
 	{
 		i = 0;
 		while (++i <= data->main[PHILO_NUM])

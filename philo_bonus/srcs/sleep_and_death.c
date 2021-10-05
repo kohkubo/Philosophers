@@ -38,7 +38,7 @@ void	is_dead(t_philo *p, int64_t time, int id)
 void	philo_exit(t_philo *p)
 {
 	sem_post(p->dead);
-	if (p->main[EC] != -1)
+	if (p->main[EAT_COUNT] != -1)
 		sem_post(p->mutex);
 	exit(0);
 }

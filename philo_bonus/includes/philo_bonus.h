@@ -23,7 +23,7 @@ enum	e_data
 	TIME_DIE,
 	TIME_EAT,
 	TIME_SLEEP,
-	EC,
+	EAT_COUNT,
 	ANK
 };
 typedef struct s_philo

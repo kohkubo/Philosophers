@@ -31,7 +31,7 @@ static void	init_philo(t_data *data)
 		data->philos[i].main[TIME_DIE] = data->main[TIME_DIE];
 		data->philos[i].main[TIME_EAT] = data->main[TIME_EAT];
 		data->philos[i].main[TIME_SLEEP] = data->main[TIME_SLEEP];
-		data->philos[i].main[EC] = data->main[EC];
+		data->philos[i].main[EAT_COUNT] = data->main[EAT_COUNT];
 		data->philos[i].left_philo = i;
 		data->philos[i].right_philo = i % data->main[PHILO_NUM] + 1;
 		store_sleeptime(data, i);
@@ -57,7 +57,7 @@ static void	check_nums_and_store(t_data *data, int ac, char **av)
 	if (PN_MAX < data->main[PHILO_NUM])
 		ft_error_exit("Invalid arguments: too many philosophers");
 	if (ac == 5)
-		data->main[EC] = -1;
+		data->main[EAT_COUNT] = -1;
 	else
 		data->eat_count_sem = ft_sem_open("/eat_count", 0);
 	data->mutex = ft_sem_open("/mutex", 1);

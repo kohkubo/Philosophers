@@ -29,5 +29,5 @@ void	store_args_data(t_data *data, int i)
 	data->philos[i].main[TIME_DIE] = data->main[TIME_DIE];
 	data->philos[i].main[TIME_EAT] = data->main[TIME_EAT];
 	data->philos[i].main[TIME_SLEEP] = data->main[TIME_SLEEP];
-	data->philos[i].main[EC] = data->main[EC];
+	data->philos[i].main[EAT_COUNT] = data->main[EAT_COUNT];
 }

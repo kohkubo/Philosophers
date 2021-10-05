@@ -39,7 +39,7 @@ void	ft_void(t_philo *p, int64_t time)
 
 void	eat(t_philo *p, int64_t time)
 {
-	if (p->main[EC] != -1 && ++p->eat_count >= p->main[EC])
+	if (p->main[EAT_COUNT] != -1 && ++p->eat_count >= p->main[EAT_COUNT])
 	{
 		sem_post(p->eat_count_sem);
 		drop_forks(p);

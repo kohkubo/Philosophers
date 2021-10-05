@@ -61,7 +61,7 @@ static int	check_nums_and_store(int ac, char **av, t_data *data)
 	if (PN_MAX < data->main[PHILO_NUM])
 		return (ft_error_msg("Invalid arguments: too many philosophers"));
 	if (ac == 5)
-		data->main[EC] = -1;
+		data->main[EAT_COUNT] = -1;
 	return (0);
 }
 
