@@ -1,4 +1,4 @@
-# Philosophers in 42 project!!
+# Philosophers in 42 project
 
 Code for Dining Philosophers Problem
 
