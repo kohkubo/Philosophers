@@ -2,6 +2,8 @@
 
 Code for Dining Philosophers Problem
 
+![demo](gif/demo_philo.gif)
+
 ## philo
 
 with multi thread and mutex
@@ -39,5 +41,3 @@ Usage: ./philo PN TD TE TS [EC]
         TS = time to sleep
         EC = number of times each philosopher must eat
 ```
-
-![demo](gif/demo.gif)
