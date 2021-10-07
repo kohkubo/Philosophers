@@ -3,7 +3,6 @@
 .PHONY		: all clean fclean re \
 			init \
 			norm \
-			test \
 			leak \
 			sani-debug \
 
@@ -51,9 +50,6 @@ re			: fclean all
 
 init		:
 	zsh header.sh srcs includes/philo_bonus.h Makefile srcs
-
-test		: $(NAME)
-	bash ./tests/test.sh
 
 sani-debug	: fclean lib_sani-debug
 	$(MAKE) CFLAGS="$(CFLAGS) -fsanitize=address" $(lib)

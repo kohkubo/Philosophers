@@ -8,17 +8,6 @@ int64_t	get_time(void)
 	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
 
-void	ft_sleep(int64_t msec)
-{
-	int64_t	now;
-
-	now = get_time();
-	while (get_time() - now < msec)
-	{
-		usleep(900);
-	}
-}
-
 void	store_args_data(t_data *data, int i)
 {
 	data->philos[i].last_eat_time = data->last_eat_time;

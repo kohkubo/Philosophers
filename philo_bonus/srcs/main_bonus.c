@@ -3,7 +3,7 @@
 static void	print_usage_exit(void)
 {
 	printf("\
-Usage: ./philo PN TD TE TS [EC]\n\n\
+Usage: ./philo_bonus PN TD TE TS [EC]\n\n\
 \
 	PN = number of philosophers\n\
 	TD = time to die\n\

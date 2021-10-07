@@ -3,7 +3,6 @@
 .PHONY		: all clean fclean re \
 			init \
 			norm \
-			test \
 			leak \
 			sani-debug \
 
@@ -18,7 +17,7 @@ obj			= $(src:%.c=%.o)
 # ***********************************
 
 CC 			= gcc
-CFLAGS		= -Wall -Wextra -Werror -g $(includes:%=-I%) -O2 #-fsanitize=thread -O2
+CFLAGS		= -Wall -Wextra -Werror -g $(includes:%=-I%) -O2 #-fsanitize=thread
 
 # ***********************************
 
@@ -51,9 +50,6 @@ re			: fclean all
 
 init		:
 	zsh header.sh srcs includes/philo.h Makefile srcs
-
-test		: $(NAME)
-	bash ./tests/test.sh
 
 sani-debug	: fclean lib_sani-debug
 	$(MAKE) CFLAGS="$(CFLAGS) -fsanitize=address" $(lib)
