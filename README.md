@@ -2,7 +2,7 @@
 
 Code for Dining Philosophers Problem
 
-![demo](gif/demo_philo.gif)
+![demo](gif/demo.gif)
 
 ## philo
 
