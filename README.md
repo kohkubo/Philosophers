@@ -39,7 +39,7 @@ Semaphores were used to avoid multi-process deadlocks.
 > cd philo_bonus
 > make
 > ./philo_bonus
-Usage: ./philo PN TD TE TS [EC]
+Usage: ./philo_bonus PN TD TE TS [EC]
 
         PN = number of philosophers
         TD = time to die
