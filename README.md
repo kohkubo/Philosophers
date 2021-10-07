@@ -47,3 +47,12 @@ Usage: ./philo_bonus PN TD TE TS [EC]
         TS = time to sleep
         EC = number of times each philosopher must eat
 ```
+
+## Checked
+
+- Scramble view
+- Thread safe
+- The time output does not go back and forth.
+- -fsanitize=thread
+- -fsanitize=address
+- -fsanitize=undefined
