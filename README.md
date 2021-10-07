@@ -1,12 +1,17 @@
-# Philosophers
+# Philosophers in 42 project
 
-Code for Dining Philosophers Problem
+Code for The Dining Philosophers Problem in 42 project.
+
+In computer science, the dining philosophers problem is an example problem often used in concurrent algorithm design to illustrate synchronization issues and techniques for resolving them.
+
+The problem was designed to illustrate the challenges of avoiding deadlock, a system state in which no progress is possible. 
 
 ![demo](gif/demo.gif)
 
 ## philo
 
-with multi thread and mutex
+The simulation is implemented in multi-threading.
+Mutexes were used to avoid multi-threaded deadlocks.
 
 ### Usage
 
@@ -25,7 +30,8 @@ Usage: ./philo PN TD TE TS [EC]
 
 ## philo_bonus
 
-with multi processes and semaphore
+The simulation is implemented in a multi-process.
+Semaphores were used to avoid multi-process deadlocks.
 
 ### Usage
 
@@ -33,7 +39,7 @@ with multi processes and semaphore
 > cd philo_bonus
 > make
 > ./philo_bonus
-Usage: ./philo PN TD TE TS [EC]
+Usage: ./philo_bonus PN TD TE TS [EC]
 
         PN = number of philosophers
         TD = time to die
